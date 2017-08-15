@@ -24,6 +24,37 @@
   [[[self mapView] mapController] setFloor:[TiUtils intValue:floor]];
 }
 
+- (void)setLogoPosition:(id)logoPosition
+{
+  ENSURE_TYPE(logoPosition, NSNumber);
+  [[[self mapView] mapController] setLogoPosition:[TiUtils intValue:logoPosition def:AisleLogoRightBottomPosition]];
+}
+
+- (void)setCompassEnabled:(id)compassEnabled
+{
+  ENSURE_TYPE(compassEnabled, NSNumber);
+  [[[self mapView] mapController] setCompassEnabled:[TiUtils boolValue:compassEnabled]];
+}
+
+- (void)deselectAll:(id)unused
+{
+  [[[self mapView] mapController] deselectAll];
+}
+
+- (void)clear:(id)unused
+{
+  [[[self mapView] mapController] clear];
+}
+- (void)zoomIn:(id)unused
+{
+  [[[self mapView] mapController] zoomIn];
+}
+
+- (void)zoomOut:(id)unused
+{
+  [[[self mapView] mapController] zoomOut];
+}
+
 #pragma mark Layout Helper
 
 USE_VIEW_FOR_CONTENT_WIDTH

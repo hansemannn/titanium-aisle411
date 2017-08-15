@@ -9,6 +9,7 @@
 #import "TiBase.h"
 #import "TiHost.h"
 #import "TiUtils.h"
+#import "MapController.h"
 
 @implementation TiAisle411Module
 
@@ -36,6 +37,11 @@
 	NSLog(@"[DEBUG] %@ loaded",self);
 }
 
-#pragma Public APIs
+#pragma mark Public APIs
+
+#pragma mark Constants
+
+MAKE_SYSTEM_PROP(AISLE_LOGO_POSITION_RIGHT_BOTTOM, AisleLogoRightBottomPosition);
+MAKE_SYSTEM_PROP(AISLE_LOGO_POSITION_LEFT_BOTTOM, AisleLogoLeftBottomPosition);
 
 @end

@@ -12,4 +12,16 @@
 
 - (void)setFloor:(id)floor;
 
+- (void)setLogoPosition:(id)logoPosition;
+
+- (void)setCompassEnabled:(id)compassEnabled;
+
+- (void)deselectAll:(id)unused;
+
+- (void)clear:(id)unused;
+
+- (void)zoomIn:(id)unused;
+
+- (void)zoomOut:(id)unused;
+
 @end
