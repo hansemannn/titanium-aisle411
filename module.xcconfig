@@ -1,0 +1,2 @@
+// Required frameworks and libraries
+OTHER_LDFLAGS=$(inherited) -framework CoreLocation -framework QuartzCore -framework CoreGraphics -lz
