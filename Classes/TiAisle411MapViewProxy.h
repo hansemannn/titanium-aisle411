@@ -24,4 +24,6 @@
 
 - (void)zoomOut:(id)unused;
 
+- (void)redraw:(id)args;
+
 @end

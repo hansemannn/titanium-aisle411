@@ -8,6 +8,8 @@
 #import "TiAisle411MapViewProxy.h"
 #import "TiUtils.h"
 #import "TiAisle411MapView.h"
+#import "FMProduct.h"
+#import "ProductCalloutOverlay.h"
 
 @implementation TiAisle411MapViewProxy
 
@@ -53,6 +55,32 @@
 - (void)zoomOut:(id)unused
 {
   [[[self mapView] mapController] zoomOut];
+}
+
+- (void)redraw:(id)args
+{
+  ENSURE_SINGLE_ARG(args, NSDictionary);
+  
+  NSMutableArray<FMProduct *> *products = [NSMutableArray array];
+  NSArray *inputProducts = [args objectForKey:@"products"];
+  
+  if (!inputProducts) {
+    NSLog(@"[ERROR] Missing required parameter 'products!'");
+    return;
+  }
+  
+  for (NSDictionary *inputProduct in inputProducts) {
+    FMProduct *product = [[FMProduct alloc] init];
+    product.name = [inputProduct objectForKey:@"name"];
+    product.idn = [TiUtils intValue:[inputProduct objectForKey:@"id"]];
+    
+    [products addObject:product];
+  }
+  
+  ProductCalloutOverlay *productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
+  productCallOutOverlay.products = products;
+  
+  [[[self mapView] mapController] redrawOverlay:productCallOutOverlay];
 }
 
 #pragma mark Layout Helper
