@@ -10,5 +10,6 @@
 
 }
 
+- (void)setFloor:(id)floor;
 
 @end

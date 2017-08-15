@@ -7,8 +7,22 @@
 
 #import "TiAisle411MapViewProxy.h"
 #import "TiUtils.h"
+#import "TiAisle411MapView.h"
 
 @implementation TiAisle411MapViewProxy
+
+- (TiAisle411MapView *)mapView
+{
+  return (TiAisle411MapView *)[self view];
+}
+
+#pragma mark Public API's
+
+- (void)setFloor:(id)floor
+{
+  ENSURE_TYPE(floor, NSNumber);
+  [[[self mapView] mapController] setFloor:[TiUtils intValue:floor]];
+}
 
 #pragma mark Layout Helper
 

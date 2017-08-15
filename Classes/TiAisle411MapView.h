@@ -16,6 +16,6 @@
 
 }
 
-@property(nonatomic, strong) UIView *mapView;
+@property(nonatomic, strong) MapController *mapController;
 
 @end

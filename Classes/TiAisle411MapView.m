@@ -6,22 +6,37 @@
  */
 
 #import "TiAisle411MapView.h"
+#import "MapBundleParser.h"
 
 @implementation TiAisle411MapView
 
-- (UIView *)mapView
+- (MapController *)mapController
 {
-  if (_mapView == nil) {
-    MapController *mapController = [[MapController alloc] init];
+  if (_mapController == nil) {
+    _mapController = [[MapController alloc] init];
     
-    _mapView = [mapController view];
-    _mapView.frame = self.bounds;
-    _mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    NSString *storeMap = [[self proxy] valueForKey:@"file"];
     
-    [self addSubview:_mapView];
+    // Dev-only
+    if (storeMap == nil) {
+      storeMap = @"11415.imap";
+    }
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:[[storeMap lastPathComponent] stringByDeletingLastPathComponent]
+                                                     ofType:[storeMap pathExtension]
+                                                inDirectory:@"/"];
+    
+    MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:path];
+    _mapController.mapBundle = [parser parse];
+    
+    UIView *mapView = [_mapController view];
+    mapView.frame = self.bounds;
+    mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    [self addSubview:mapView];
   }
   
-  return _mapView;
+  return _mapController;
 }
 
 #pragma mark Layout Helper
@@ -44,7 +59,7 @@
 
 - (void)frameSizeChanged:(CGRect)frame bounds:(CGRect)bounds
 {
-  for (UIView *child in [[self mapView] subviews]) {
+  for (UIView *child in [[[self mapController] view] subviews]) {
     [TiUtils setView:child positionRect:bounds];
   }
   
