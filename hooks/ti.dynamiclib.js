@@ -147,8 +147,18 @@ function createPBXCopyFilesBuildPhase(xobjs, embeddedFrameword_copy_uuid, embedd
 	 *		runOnlyForDeploymentPostprocessing = 0;
 	 *	};
 	 */
-	xobjs.PBXCopyFilesBuildPhase = xobjs.PBXCopyFilesBuildPhase || {};
-	xobjs.PBXCopyFilesBuildPhase[embeddedFrameword_copy_uuid] = {
+	xobjs.PBXCopyFilesBuildPhase = xobjs.PBXCopyFilesBuildPhase || {};  
+  	var keys = Object.keys(xobjs.PBXCopyFilesBuildPhase);
+
+  	if (keys && xobjs.PBXCopyFilesBuildPhase[keys[0]]) {
+    		xobjs.PBXCopyFilesBuildPhase[keys[0]].files.push({
+      			value: embeddedFrameword_uuid + '',
+			comment: framework_name + ' in Embed Frameworks'
+    		});
+    		return;
+  	}
+  
+  	xobjs.PBXCopyFilesBuildPhase[embeddedFrameword_copy_uuid] = {
 		isa: 'PBXCopyFilesBuildPhase',
 		buildActionMask: '2147483647',
 		dstPath: '""',
@@ -216,16 +226,26 @@ function createPBXGroup(xobjs, fileRef_uuid, framework_name) {
 
 function createPBXNativeTarget(xobjs, embeddedFrameword_copy_uuid) {
 	for (var key in xobjs.PBXNativeTarget) {
-		xobjs.PBXNativeTarget[key].buildPhases.push({
-			value: embeddedFrameword_copy_uuid + '',
-			comment: 'Embed Frameworks'
-		});
+    		var exists = false;
+    		for (var obj in xobjs.PBXNativeTarget[key].buildPhases) {
+      			if (obj.comment === 'Embed Frameworks') {
+      		  		exists = true;
+      			}
+    		}
+    
+    		if (!exists) {
+  			xobjs.PBXNativeTarget[key].buildPhases.push({
+  				value: embeddedFrameword_copy_uuid + '',
+  				comment: 'Embed Frameworks'
+  			});
+    		}
 		return;
 	}
 }
 
 function createPBXRunShellScriptBuildPhase(xobjs, script_uuid, shell_path, shell_script){
 	xobjs.PBXShellScriptBuildPhase = xobjs.PBXShellScriptBuildPhase || {};
+  
 	xobjs.PBXShellScriptBuildPhase[script_uuid] = { 
  		isa: 'PBXShellScriptBuildPhase', 
  		buildActionMask: '2147483647', 
