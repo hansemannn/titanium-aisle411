@@ -5,8 +5,9 @@
  * Please see the LICENSE included with this distribution for details.
  */
 #import "TiViewProxy.h"
+#import <MapSDK/MapSDK.h>
 
-@interface TiAisle411MapViewProxy : TiViewProxy {
+@interface TiAisle411MapViewProxy : TiViewProxy <InformationBarDelegate, InformationBarDataSource> {
 
 }
 

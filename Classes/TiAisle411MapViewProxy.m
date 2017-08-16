@@ -80,8 +80,26 @@
   
   ProductCalloutOverlay *productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
   productCallOutOverlay.products = products;
+  productCallOutOverlay.informationBar.delegate = self;
+  productCallOutOverlay.informationBar.dataSource = self;
   
   [[[self mapView] mapController] redrawOverlay:productCallOutOverlay];
+}
+
+#pragma mark InformationBarDelegate
+
+- (void)informationBar:(InformationBar *)informationBar didSelectRowAtIndex:(NSInteger)rowIndex forItem:(OverlayItem *)item
+{
+  if ([self _hasListeners:@"didSelectItem"]) {
+    [self fireEvent:@"didSelectItem" withObject:@{@"title": item.title}]; // Return more if desired
+  }
+}
+
+#pragma mark InformationBarDataSource
+
+- (BOOL)informationBar:(InformationBar *)informationBar fixedForItem:(OverlayItem *)item
+{
+  [item setDisabled:YES]; // Disable items
 }
 
 #pragma mark Layout Helper
