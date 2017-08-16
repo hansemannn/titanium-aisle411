@@ -11,7 +11,7 @@
 #import "TiUtils.h"
 
 #import <MapSDK/MapController.h>
-#import <AisleNetworking/AisleNetworking.h>
+#import <AisleNetworking/AisleNetworking-Swift.h>
 
 @implementation TiAisle411Module
 
