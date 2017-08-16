@@ -51,7 +51,48 @@
   AisleServer *server = [AisleServer shared];
   [server requestCachedRasterMapForVenueId:[venueId integerValue]
                          withResponseBlock:^(NSURL *url, NSArray<IVKError *> *errors) {
-                           [callback call:@[@{@"url": NULL_IF_NIL(url.absoluteString)}] thisObject:self];
+                           if (errors.count > 0) {
+                             [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                             return;
+                           }
+
+                           [callback call:@[@{@"url": NULL_IF_NIL(url.absoluteString), @"path": NULL_IF_NIL(url.path)}] thisObject:self];
+                         }];
+}
+
+- (void)search:(id)args
+{
+  ENSURE_SINGLE_ARG(args, NSDictionary);
+  
+  NSNumber *venueId = [args objectForKey:@"venueId"];
+  NSString *term = [args objectForKey:@"term"];
+  NSNumber *startingIndex = [args objectForKey:@"startingIndex"];
+  NSNumber *endingIndex = [args objectForKey:@"endingIndex"];
+  NSNumber *maxCount = [args objectForKey:@"maxCount"];
+  KrollCallback *callback = [args objectForKey:@"callback"];
+  
+  AisleServer *server = [AisleServer shared];
+  [server searchWithVenueWithId:venueId.integerValue
+                        forTerm:term
+              withStartingIndex:startingIndex.integerValue
+                 andEndingIndex:endingIndex.integerValue
+                   withMaxCount:maxCount.integerValue
+              withResponseBlock:^(NSArray<IVKVenueItem *> *venues, NSArray<IVKError *> *errors) {
+                if (errors.count > 0) {
+                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                  return;
+                }
+                
+                NSMutableArray *dictVenues = [NSMutableArray arrayWithCapacity:venues.count];
+                
+                for (IVKVenueItem *venueItem in venues) {
+                  [dictVenues addObject:@{
+                    @"name": venueItem.name,
+                    @"id": NUMINTEGER(venueItem.id),
+                    @"venueItemTypeName": venueItem.venueItemTypeName, // More to be exposed here
+                  }];
+                }
+                [callback call:@[@{@"venues": dictVenues}] thisObject:self];
                          }];
 }
 

@@ -15,16 +15,20 @@
   if (_mapController == nil) {
     _mapController = [[MapController alloc] init];
     
-    NSString *storeMap = [[self proxy] valueForKey:@"file"];
+    NSString *url = [[self proxy] valueForKey:@"url"];
     
     // Dev-only
-    if (storeMap == nil) {
-      storeMap = @"11415.imap";
+    if (url == nil) {
+      url = @"11415.imap";
     }
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:[[storeMap lastPathComponent] stringByDeletingLastPathComponent]
-                                                     ofType:[storeMap pathExtension]
+    NSString *path = [[NSBundle mainBundle] pathForResource:[[url lastPathComponent] stringByDeletingLastPathComponent]
+                                                     ofType:[url pathExtension]
                                                 inDirectory:@"/"];
+    
+    if (path == nil) {
+      path = [[NSURL URLWithString:url] path];
+    }
     
     MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:path];
     _mapController.mapBundle = [parser parse];
