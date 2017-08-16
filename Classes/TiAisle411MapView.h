@@ -5,7 +5,7 @@
  * Please see the LICENSE included with this distribution for details.
  */
 #import "TiUIView.h"
-#import "aisle411-MapSDK/MapController.h"
+#import <MapSDK/MapController.h>
 
 @interface TiAisle411MapView : TiUIView {
 @private

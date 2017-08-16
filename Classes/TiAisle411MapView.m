@@ -6,7 +6,7 @@
  */
 
 #import "TiAisle411MapView.h"
-#import "MapBundleParser.h"
+#import <MapSDK/MapBundleParser.h>
 
 @implementation TiAisle411MapView
 

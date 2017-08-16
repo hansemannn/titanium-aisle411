@@ -27,44 +27,12 @@
 		24DE9E1111C5FE74003F90F6 /* TiAisle411ModuleAssets.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DE9E0F11C5FE74003F90F6 /* TiAisle411ModuleAssets.h */; };
 		24DE9E1211C5FE74003F90F6 /* TiAisle411ModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* TiAisle411ModuleAssets.m */; };
 		AA747D9F0F9514B9006C5449 /* TiAisle411_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* TiAisle411_Prefix.pch */; };
-		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
-		DB46FDAA1F439EF6004C4CCC /* CalloutMessageOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD8B1F439EF6004C4CCC /* CalloutMessageOverlay.h */; };
-		DB46FDAB1F439EF6004C4CCC /* CalloutOptionOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD8C1F439EF6004C4CCC /* CalloutOptionOverlay.h */; };
-		DB46FDAC1F439EF6004C4CCC /* CalloutOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD8D1F439EF6004C4CCC /* CalloutOverlay.h */; };
-		DB46FDAD1F439EF6004C4CCC /* CalloutOverlayDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD8E1F439EF6004C4CCC /* CalloutOverlayDelegate.h */; };
-		DB46FDAE1F439EF6004C4CCC /* CMControlPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD8F1F439EF6004C4CCC /* CMControlPoint.h */; };
-		DB46FDAF1F439EF6004C4CCC /* CustomPathOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD901F439EF6004C4CCC /* CustomPathOverlay.h */; };
-		DB46FDB01F439EF6004C4CCC /* DirectionOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD911F439EF6004C4CCC /* DirectionOverlay.h */; };
-		DB46FDB11F439EF6004C4CCC /* FMFeaturedProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD921F439EF6004C4CCC /* FMFeaturedProduct.h */; };
-		DB46FDB21F439EF6004C4CCC /* FMProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD931F439EF6004C4CCC /* FMProduct.h */; };
-		DB46FDB31F439EF6004C4CCC /* FMSection.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD941F439EF6004C4CCC /* FMSection.h */; };
-		DB46FDB41F439EF6004C4CCC /* FMShoppingList.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD951F439EF6004C4CCC /* FMShoppingList.h */; };
-		DB46FDB51F439EF6004C4CCC /* FMSponsoredPin.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD961F439EF6004C4CCC /* FMSponsoredPin.h */; };
-		DB46FDB61F439EF6004C4CCC /* InformationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD971F439EF6004C4CCC /* InformationBar.h */; };
-		DB46FDB71F439EF6004C4CCC /* libMapSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB46FD981F439EF6004C4CCC /* libMapSDK.a */; };
-		DB46FDB81F439EF6004C4CCC /* MapBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD991F439EF6004C4CCC /* MapBundle.h */; };
-		DB46FDB91F439EF6004C4CCC /* MapBundleParser.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD9A1F439EF6004C4CCC /* MapBundleParser.h */; };
-		DB46FDBA1F439EF6004C4CCC /* MapController.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD9B1F439EF6004C4CCC /* MapController.h */; };
-		DB46FDBB1F439EF6004C4CCC /* MapControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD9C1F439EF6004C4CCC /* MapControllerDelegate.h */; };
-		DB46FDBC1F439EF6004C4CCC /* MapIconOverlayItem.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD9D1F439EF6004C4CCC /* MapIconOverlayItem.h */; };
-		DB46FDBD1F439EF6004C4CCC /* MapIconsOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD9E1F439EF6004C4CCC /* MapIconsOverlay.h */; };
-		DB46FDBE1F439EF6004C4CCC /* Overlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FD9F1F439EF6004C4CCC /* Overlay.h */; };
-		DB46FDBF1F439EF6004C4CCC /* OverlayItem.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA01F439EF6004C4CCC /* OverlayItem.h */; };
-		DB46FDC01F439EF6004C4CCC /* OverlaySponsoredItem.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA11F439EF6004C4CCC /* OverlaySponsoredItem.h */; };
-		DB46FDC11F439EF6004C4CCC /* PathOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA21F439EF6004C4CCC /* PathOverlay.h */; };
-		DB46FDC21F439EF6004C4CCC /* ProductCalloutOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA31F439EF6004C4CCC /* ProductCalloutOverlay.h */; };
-		DB46FDC31F439EF6004C4CCC /* ProductCalloutOverlayDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA41F439EF6004C4CCC /* ProductCalloutOverlayDelegate.h */; };
-		DB46FDC41F439EF6004C4CCC /* ProductOverlayItem.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA51F439EF6004C4CCC /* ProductOverlayItem.h */; };
-		DB46FDC61F439EF6004C4CCC /* Router.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA71F439EF6004C4CCC /* Router.h */; };
-		DB46FDC71F439EF6004C4CCC /* ShoppingListRouteOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA81F439EF6004C4CCC /* ShoppingListRouteOverlay.h */; };
-		DB46FDC81F439EF6004C4CCC /* UserLocationOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDA91F439EF6004C4CCC /* UserLocationOverlay.h */; };
-		DB46FDCE1F439F2B004C4CCC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB46FDCD1F439F2B004C4CCC /* CoreLocation.framework */; };
-		DB46FDD01F439F30004C4CCC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB46FDCF1F439F30004C4CCC /* CoreGraphics.framework */; };
-		DB46FDD21F439F34004C4CCC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB46FDD11F439F34004C4CCC /* QuartzCore.framework */; };
 		DB46FDD71F43A0ED004C4CCC /* TiAisle411MapViewProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDD51F43A0ED004C4CCC /* TiAisle411MapViewProxy.h */; };
 		DB46FDD81F43A0ED004C4CCC /* TiAisle411MapViewProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB46FDD61F43A0ED004C4CCC /* TiAisle411MapViewProxy.m */; };
 		DB46FDDC1F43A0FD004C4CCC /* TiAisle411MapView.h in Headers */ = {isa = PBXBuildFile; fileRef = DB46FDDA1F43A0FD004C4CCC /* TiAisle411MapView.h */; };
 		DB46FDDD1F43A0FD004C4CCC /* TiAisle411MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = DB46FDDB1F43A0FD004C4CCC /* TiAisle411MapView.m */; };
+		DB75E8971F4422D4008C24A6 /* AisleNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB75E8951F4422D4008C24A6 /* AisleNetworking.framework */; };
+		DB75E8981F4422D4008C24A6 /* MapSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB75E8961F4422D4008C24A6 /* MapSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,47 +52,13 @@
 		24DE9E0F11C5FE74003F90F6 /* TiAisle411ModuleAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiAisle411ModuleAssets.h; path = Classes/TiAisle411ModuleAssets.h; sourceTree = "<group>"; };
 		24DE9E1011C5FE74003F90F6 /* TiAisle411ModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiAisle411ModuleAssets.m; path = Classes/TiAisle411ModuleAssets.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* TiAisle411_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiAisle411_Prefix.pch; sourceTree = SOURCE_ROOT; };
-		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libti.aisle411.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libti.aisle411.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DB46FD8B1F439EF6004C4CCC /* CalloutMessageOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalloutMessageOverlay.h; sourceTree = "<group>"; };
-		DB46FD8C1F439EF6004C4CCC /* CalloutOptionOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalloutOptionOverlay.h; sourceTree = "<group>"; };
-		DB46FD8D1F439EF6004C4CCC /* CalloutOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalloutOverlay.h; sourceTree = "<group>"; };
-		DB46FD8E1F439EF6004C4CCC /* CalloutOverlayDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalloutOverlayDelegate.h; sourceTree = "<group>"; };
-		DB46FD8F1F439EF6004C4CCC /* CMControlPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMControlPoint.h; sourceTree = "<group>"; };
-		DB46FD901F439EF6004C4CCC /* CustomPathOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPathOverlay.h; sourceTree = "<group>"; };
-		DB46FD911F439EF6004C4CCC /* DirectionOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionOverlay.h; sourceTree = "<group>"; };
-		DB46FD921F439EF6004C4CCC /* FMFeaturedProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMFeaturedProduct.h; sourceTree = "<group>"; };
-		DB46FD931F439EF6004C4CCC /* FMProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMProduct.h; sourceTree = "<group>"; };
-		DB46FD941F439EF6004C4CCC /* FMSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMSection.h; sourceTree = "<group>"; };
-		DB46FD951F439EF6004C4CCC /* FMShoppingList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMShoppingList.h; sourceTree = "<group>"; };
-		DB46FD961F439EF6004C4CCC /* FMSponsoredPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMSponsoredPin.h; sourceTree = "<group>"; };
-		DB46FD971F439EF6004C4CCC /* InformationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationBar.h; sourceTree = "<group>"; };
-		DB46FD981F439EF6004C4CCC /* libMapSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMapSDK.a; sourceTree = "<group>"; };
-		DB46FD991F439EF6004C4CCC /* MapBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapBundle.h; sourceTree = "<group>"; };
-		DB46FD9A1F439EF6004C4CCC /* MapBundleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapBundleParser.h; sourceTree = "<group>"; };
-		DB46FD9B1F439EF6004C4CCC /* MapController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapController.h; sourceTree = "<group>"; };
-		DB46FD9C1F439EF6004C4CCC /* MapControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapControllerDelegate.h; sourceTree = "<group>"; };
-		DB46FD9D1F439EF6004C4CCC /* MapIconOverlayItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapIconOverlayItem.h; sourceTree = "<group>"; };
-		DB46FD9E1F439EF6004C4CCC /* MapIconsOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapIconsOverlay.h; sourceTree = "<group>"; };
-		DB46FD9F1F439EF6004C4CCC /* Overlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Overlay.h; sourceTree = "<group>"; };
-		DB46FDA01F439EF6004C4CCC /* OverlayItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayItem.h; sourceTree = "<group>"; };
-		DB46FDA11F439EF6004C4CCC /* OverlaySponsoredItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlaySponsoredItem.h; sourceTree = "<group>"; };
-		DB46FDA21F439EF6004C4CCC /* PathOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathOverlay.h; sourceTree = "<group>"; };
-		DB46FDA31F439EF6004C4CCC /* ProductCalloutOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCalloutOverlay.h; sourceTree = "<group>"; };
-		DB46FDA41F439EF6004C4CCC /* ProductCalloutOverlayDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCalloutOverlayDelegate.h; sourceTree = "<group>"; };
-		DB46FDA51F439EF6004C4CCC /* ProductOverlayItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductOverlayItem.h; sourceTree = "<group>"; };
-		DB46FDA71F439EF6004C4CCC /* Router.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Router.h; sourceTree = "<group>"; };
-		DB46FDA81F439EF6004C4CCC /* ShoppingListRouteOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShoppingListRouteOverlay.h; sourceTree = "<group>"; };
-		DB46FDA91F439EF6004C4CCC /* UserLocationOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationOverlay.h; sourceTree = "<group>"; };
-		DB46FDC91F439F19004C4CCC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		DB46FDCB1F439F23004C4CCC /* libstdc++.6.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.tbd"; path = "usr/lib/libstdc++.6.tbd"; sourceTree = SDKROOT; };
-		DB46FDCD1F439F2B004C4CCC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		DB46FDCF1F439F30004C4CCC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		DB46FDD11F439F34004C4CCC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DB46FDD51F43A0ED004C4CCC /* TiAisle411MapViewProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiAisle411MapViewProxy.h; path = Classes/TiAisle411MapViewProxy.h; sourceTree = "<group>"; };
 		DB46FDD61F43A0ED004C4CCC /* TiAisle411MapViewProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiAisle411MapViewProxy.m; path = Classes/TiAisle411MapViewProxy.m; sourceTree = "<group>"; };
 		DB46FDDA1F43A0FD004C4CCC /* TiAisle411MapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiAisle411MapView.h; path = Classes/TiAisle411MapView.h; sourceTree = "<group>"; };
 		DB46FDDB1F43A0FD004C4CCC /* TiAisle411MapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiAisle411MapView.m; path = Classes/TiAisle411MapView.m; sourceTree = "<group>"; };
+		DB75E8951F4422D4008C24A6 /* AisleNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AisleNetworking.framework; path = platform/AisleNetworking.framework; sourceTree = "<group>"; };
+		DB75E8961F4422D4008C24A6 /* MapSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapSDK.framework; path = platform/MapSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,11 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB46FDD21F439F34004C4CCC /* QuartzCore.framework in Frameworks */,
-				DB46FDD01F439F30004C4CCC /* CoreGraphics.framework in Frameworks */,
-				DB46FDCE1F439F2B004C4CCC /* CoreLocation.framework in Frameworks */,
-				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
-				DB46FDB71F439EF6004C4CCC /* libMapSDK.a in Frameworks */,
+				DB75E8981F4422D4008C24A6 /* MapSDK.framework in Frameworks */,
+				DB75E8971F4422D4008C24A6 /* AisleNetworking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,7 +85,6 @@
 		0867D691FE84028FC02AAC07 /* titanium-aisle411 */ = {
 			isa = PBXGroup;
 			children = (
-				DB46FD8A1F439EF6004C4CCC /* aisle411-MapSDK */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
@@ -166,12 +96,8 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DB46FDD11F439F34004C4CCC /* QuartzCore.framework */,
-				DB46FDCF1F439F30004C4CCC /* CoreGraphics.framework */,
-				DB46FDCD1F439F2B004C4CCC /* CoreLocation.framework */,
-				DB46FDCB1F439F23004C4CCC /* libstdc++.6.tbd */,
-				DB46FDC91F439F19004C4CCC /* libz.tbd */,
-				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
+				DB75E8951F4422D4008C24A6 /* AisleNetworking.framework */,
+				DB75E8961F4422D4008C24A6 /* MapSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -192,52 +118,6 @@
 				24DD6D1B1134B66800162E58 /* titanium.xcconfig */,
 			);
 			name = "Other Sources";
-			sourceTree = "<group>";
-		};
-		DB46FD8A1F439EF6004C4CCC /* aisle411-MapSDK */ = {
-			isa = PBXGroup;
-			children = (
-				DB46FD981F439EF6004C4CCC /* libMapSDK.a */,
-				DB46FDD31F439F45004C4CCC /* Headers */,
-			);
-			name = "aisle411-MapSDK";
-			path = "Classes/aisle411-MapSDK";
-			sourceTree = "<group>";
-		};
-		DB46FDD31F439F45004C4CCC /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				DB46FD8B1F439EF6004C4CCC /* CalloutMessageOverlay.h */,
-				DB46FD8C1F439EF6004C4CCC /* CalloutOptionOverlay.h */,
-				DB46FD8D1F439EF6004C4CCC /* CalloutOverlay.h */,
-				DB46FD8E1F439EF6004C4CCC /* CalloutOverlayDelegate.h */,
-				DB46FD8F1F439EF6004C4CCC /* CMControlPoint.h */,
-				DB46FD901F439EF6004C4CCC /* CustomPathOverlay.h */,
-				DB46FD911F439EF6004C4CCC /* DirectionOverlay.h */,
-				DB46FD921F439EF6004C4CCC /* FMFeaturedProduct.h */,
-				DB46FD931F439EF6004C4CCC /* FMProduct.h */,
-				DB46FD941F439EF6004C4CCC /* FMSection.h */,
-				DB46FD951F439EF6004C4CCC /* FMShoppingList.h */,
-				DB46FD961F439EF6004C4CCC /* FMSponsoredPin.h */,
-				DB46FD971F439EF6004C4CCC /* InformationBar.h */,
-				DB46FD991F439EF6004C4CCC /* MapBundle.h */,
-				DB46FD9A1F439EF6004C4CCC /* MapBundleParser.h */,
-				DB46FD9B1F439EF6004C4CCC /* MapController.h */,
-				DB46FD9C1F439EF6004C4CCC /* MapControllerDelegate.h */,
-				DB46FD9D1F439EF6004C4CCC /* MapIconOverlayItem.h */,
-				DB46FD9E1F439EF6004C4CCC /* MapIconsOverlay.h */,
-				DB46FD9F1F439EF6004C4CCC /* Overlay.h */,
-				DB46FDA01F439EF6004C4CCC /* OverlayItem.h */,
-				DB46FDA11F439EF6004C4CCC /* OverlaySponsoredItem.h */,
-				DB46FDA21F439EF6004C4CCC /* PathOverlay.h */,
-				DB46FDA31F439EF6004C4CCC /* ProductCalloutOverlay.h */,
-				DB46FDA41F439EF6004C4CCC /* ProductCalloutOverlayDelegate.h */,
-				DB46FDA51F439EF6004C4CCC /* ProductOverlayItem.h */,
-				DB46FDA71F439EF6004C4CCC /* Router.h */,
-				DB46FDA81F439EF6004C4CCC /* ShoppingListRouteOverlay.h */,
-				DB46FDA91F439EF6004C4CCC /* UserLocationOverlay.h */,
-			);
-			name = Headers;
 			sourceTree = "<group>";
 		};
 		DB46FDD41F43A0C1004C4CCC /* Module */ = {
@@ -269,40 +149,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB46FDAC1F439EF6004C4CCC /* CalloutOverlay.h in Headers */,
-				DB46FDC21F439EF6004C4CCC /* ProductCalloutOverlay.h in Headers */,
-				DB46FDB61F439EF6004C4CCC /* InformationBar.h in Headers */,
-				DB46FDC01F439EF6004C4CCC /* OverlaySponsoredItem.h in Headers */,
-				DB46FDB31F439EF6004C4CCC /* FMSection.h in Headers */,
-				DB46FDC81F439EF6004C4CCC /* UserLocationOverlay.h in Headers */,
-				DB46FDB21F439EF6004C4CCC /* FMProduct.h in Headers */,
-				DB46FDBF1F439EF6004C4CCC /* OverlayItem.h in Headers */,
-				DB46FDC71F439EF6004C4CCC /* ShoppingListRouteOverlay.h in Headers */,
-				DB46FDC11F439EF6004C4CCC /* PathOverlay.h in Headers */,
-				DB46FDB41F439EF6004C4CCC /* FMShoppingList.h in Headers */,
 				DB46FDDC1F43A0FD004C4CCC /* TiAisle411MapView.h in Headers */,
-				DB46FDC61F439EF6004C4CCC /* Router.h in Headers */,
-				DB46FDBA1F439EF6004C4CCC /* MapController.h in Headers */,
-				DB46FDBB1F439EF6004C4CCC /* MapControllerDelegate.h in Headers */,
-				DB46FDAE1F439EF6004C4CCC /* CMControlPoint.h in Headers */,
-				DB46FDB51F439EF6004C4CCC /* FMSponsoredPin.h in Headers */,
-				DB46FDAA1F439EF6004C4CCC /* CalloutMessageOverlay.h in Headers */,
-				DB46FDAF1F439EF6004C4CCC /* CustomPathOverlay.h in Headers */,
 				AA747D9F0F9514B9006C5449 /* TiAisle411_Prefix.pch in Headers */,
 				24DD6CF91134B3F500162E58 /* TiAisle411Module.h in Headers */,
-				DB46FDB81F439EF6004C4CCC /* MapBundle.h in Headers */,
-				DB46FDAD1F439EF6004C4CCC /* CalloutOverlayDelegate.h in Headers */,
-				DB46FDC41F439EF6004C4CCC /* ProductOverlayItem.h in Headers */,
-				DB46FDB11F439EF6004C4CCC /* FMFeaturedProduct.h in Headers */,
-				DB46FDBC1F439EF6004C4CCC /* MapIconOverlayItem.h in Headers */,
-				DB46FDB91F439EF6004C4CCC /* MapBundleParser.h in Headers */,
 				DB46FDD71F43A0ED004C4CCC /* TiAisle411MapViewProxy.h in Headers */,
-				DB46FDBE1F439EF6004C4CCC /* Overlay.h in Headers */,
-				DB46FDB01F439EF6004C4CCC /* DirectionOverlay.h in Headers */,
 				24DE9E1111C5FE74003F90F6 /* TiAisle411ModuleAssets.h in Headers */,
-				DB46FDAB1F439EF6004C4CCC /* CalloutOptionOverlay.h in Headers */,
-				DB46FDBD1F439EF6004C4CCC /* MapIconsOverlay.h in Headers */,
-				DB46FDC31F439EF6004C4CCC /* ProductCalloutOverlayDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +253,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DSTROOT = /tmp/TiAisle411.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/platform/ios",
+					"$(PROJECT_DIR)/platform",
+				);
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -442,6 +298,11 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/TiAisle411.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/platform/ios",
+					"$(PROJECT_DIR)/platform",
+				);
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

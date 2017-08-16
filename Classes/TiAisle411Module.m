@@ -9,7 +9,9 @@
 #import "TiBase.h"
 #import "TiHost.h"
 #import "TiUtils.h"
-#import "MapController.h"
+
+#import <MapSDK/MapController.h>
+#import <AisleNetworking/AisleNetworking.h>
 
 @implementation TiAisle411Module
 
@@ -38,6 +40,20 @@
 }
 
 #pragma mark Public APIs
+
+- (void)requestCachedRasterMapForVenueId:(id)args
+{
+  ENSURE_SINGLE_ARG(args, NSDictionary);
+  
+  NSNumber *venueId = [args objectForKey:@"venueId"];
+  KrollCallback *callback = [args objectForKey:@"callback"];
+  
+  AisleServer *server = [AisleServer shared];
+  [server requestCachedRasterMapForVenueId:[venueId integerValue]
+                         withResponseBlock:^(NSURL *url, NSArray<IVKError *> *errors) {
+                           [callback call:@[@{@"url": NULL_IF_NIL(url.absoluteString)}] thisObject:self];
+                         }];
+}
 
 #pragma mark Constants
 

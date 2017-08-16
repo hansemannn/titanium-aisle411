@@ -8,8 +8,9 @@
 #import "TiAisle411MapViewProxy.h"
 #import "TiUtils.h"
 #import "TiAisle411MapView.h"
-#import "FMProduct.h"
-#import "ProductCalloutOverlay.h"
+
+#import <MapSDK/FMProduct.h>
+#import <MapSDK/ProductCalloutOverlay.h>
 
 @implementation TiAisle411MapViewProxy
 

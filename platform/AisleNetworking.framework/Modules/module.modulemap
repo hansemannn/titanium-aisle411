@@ -1,0 +1,10 @@
+framework module AisleNetworking {
+  umbrella header "AisleNetworking.h"
+
+  export *
+  module * { export * }
+}
+
+module AisleNetworking.Swift {
+    header "AisleNetworking-Swift.h"
+}
