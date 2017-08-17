@@ -11,7 +11,7 @@
 
 }
 
-- (void)requestCachedRasterMapForVenueId:(id)args;
+- (void)requestCachedRasterMap:(id)args;
 
 - (void)search:(id)args;
 

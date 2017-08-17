@@ -1,6 +1,6 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2009-2017 by Appcelerator, Inc. All Rights Reserved.
+ * Copyright (c) 2009-Present by Axway Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
@@ -25,6 +25,12 @@
 
 - (void)zoomOut:(id)unused;
 
-- (void)redraw:(id)args;
+- (void)redraw:(id)unused;
+
+- (void)redrawOverlay:(id)args;
+
+- (void)reloadTiles:(id)unused;
+
+- (void)fadeIn:(id)args;
 
 @end

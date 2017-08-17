@@ -1,6 +1,6 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2009-2017 by Appcelerator, Inc. All Rights Reserved.
+ * Copyright (c) 2009-Present by Axway Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
@@ -48,6 +48,7 @@
 {
   [[[self mapView] mapController] clear];
 }
+
 - (void)zoomIn:(id)unused
 {
   [[[self mapView] mapController] zoomIn];
@@ -58,7 +59,12 @@
   [[[self mapView] mapController] zoomOut];
 }
 
-- (void)redraw:(id)args
+- (void)redraw:(id)unused
+{
+  [[[self mapView] mapController] redraw];
+}
+
+- (void)redrawOverlay:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
   
@@ -86,6 +92,22 @@
   [[[self mapView] mapController] redrawOverlay:productCallOutOverlay];
 }
 
+- (void)reloadTiles:(id)unused
+{
+  [[[self mapView] mapController] reloadTiles];
+}
+
+- (void)fadeIn:(id)args
+{
+  ENSURE_SINGLE_ARG(args, NSDictionary);
+  
+  NSNumber *zoom = [args objectForKey:@"zoom"];
+  NSNumber *relativeToScreen = [args objectForKey:@"relativeToScreen"];
+  
+  [[[self mapView] mapController] fadeInWithZoom:zoom.floatValue
+                                relativeToScreen:relativeToScreen.boolValue];
+}
+
 #pragma mark InformationBarDelegate
 
 - (void)informationBar:(InformationBar *)informationBar didSelectRowAtIndex:(NSInteger)rowIndex forItem:(OverlayItem *)item
@@ -100,6 +122,8 @@
 - (BOOL)informationBar:(InformationBar *)informationBar fixedForItem:(OverlayItem *)item
 {
   [item setDisabled:YES]; // Disable items
+
+  return YES;
 }
 
 #pragma mark Layout Helper

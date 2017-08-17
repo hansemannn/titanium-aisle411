@@ -1,106 +1,49 @@
-Appcelerator Titanium Mobile Module Project
-===========================================
+# Aisle411 in Axway Titanium
 
-This is a skeleton Titanium Mobile Mobile module project.
+Use the Aisle411 iOS-SDK in Axway Titanium.
 
+## Documentation
 
-MODULE NAMING
--------------
+### Top-Level
 
-Choose a unique module id for your module.  This ID usually follows a namespace
-convention using DNS notation.  For example, com.appcelerator.module.test.  This
-ID can only be used once by all public modules in Titanium.
+#### Methods
 
+- [x] `requestCachedRasterMap(args)`
+  - `venueId` (Number)
+  - `callback` (Callback)
+- [x] `search(args)`
+  - `venueId` (Number)
+  - `term` (String)
+  - `startingIndex` (Number)
+  - `endingIndex` (Number)
+  - `maxCount` (Number)
+  - `callback` (Callback)
 
-GET STARTED
-------------
+### `MapView`
+Create a new map-view with Aisle411.createMapView()
 
-1. Edit manifest with the appropriate details about your module.
-2. Edit LICENSE to add your license details.
-3. Place any assets (such as PNG files) that are required anywhere in the module folder.
-4. Edit the timodule.json and configure desired settings.
-5. Code and build.
+#### Properties
 
+- [x] `floor`
+- [x] `logoPosition`
+- [x] `compassEnabled`
 
-DOCUMENTATION FOR YOUR MODULE
------------------------------
+#### Methods
 
-You should provide at least minimal documentation for your module in `documentation` folder using the Markdown syntax.
+- [x] `clear()`
+- [x] `zoomIn()`
+- [x] `zoomOut()`
+- [x] `redraw()`
+- [x] `redrawOverlay(args)`
+  - `products` (Array<Object<name, id>>)
+- [x] `fadeIn(args)`
+  - `zoom` (Number)
+  - `relativeToScreen` (Boolean)
+- [x] `reloadTiles()`
 
-For more information on the Markdown syntax, refer to this documentation at:
+## Author
+Hans Knöchel
 
-<http://daringfireball.net/projects/markdown/>
-
-
-TEST HARNESS EXAMPLE FOR YOUR MODULE
-------------------------------------
-
-The `example` directory contains a skeleton application test harness that can be
-used for testing and providing an example of usage to the users of your module.
-
-
-BUILDING YOUR MODULE
---------------------
-
-Simply run `titanium build --platform <name of platform> --build-type production --dir /path/to/module`.
-You can omit the --dir option if your working directory is in the module's project directory.
-
-
-INSTALL YOUR MODULE
--------------------
-
-Mac OS X
---------
-Copy the distribution zip file into the `~/Library/Application Support/Titanium` folder
-
-Linux
------
-Copy the distribution zip file into the `~/.titanium` folder
-
-Windows
--------
-Copy the distribution zip file into the `C:\ProgramData\Titanium` folder
-
-
-REGISTER YOUR MODULE
---------------------
-
-Register your module with your application by editing `tiapp.xml` and adding your module.
-Example:
-
-<modules>
-	<module version="0.1">ti.aisle411</module>
-</modules>
-
-When you run your project, the compiler will combine your module along with its dependencies
-and assets into the application.
-
-
-USING YOUR MODULE IN CODE
--------------------------
-
-To use your module in code, you will need to require it.
-
-For example,
-
-	var my_module = require('ti.aisle411');
-	my_module.foo();
-
-
-TESTING YOUR MODULE
--------------------
-
-To test with the script, execute:
-
-	titanium run --dir=YOURMODULEDIR
-
-This will execute the app.js in the example folder as a Titanium application.
-
-
-DISTRIBUTING YOUR MODULE
--------------------------
-
-You can choose to manually distribute your module distribution zip file or through the Titanium Marketplace!
-
-
-Cheers!
+## License
+Copyright(c) 2017-Present by Ayway Appcelerator. All Rights Reserved. 
+Please see the LICENSE file included in the distribution for further details.

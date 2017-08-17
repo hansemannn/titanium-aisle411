@@ -41,7 +41,7 @@
 
 #pragma mark Public APIs
 
-- (void)requestCachedRasterMapForVenueId:(id)args
+- (void)requestCachedRasterMap:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
   
