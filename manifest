@@ -15,4 +15,4 @@ name: titanium-aisle411
 moduleid: ti.aisle411
 guid: 2bd872ef-d80a-4d07-be50-cbd424b67eb4
 platform: iphone
-minsdk: 6.2.0
+minsdk: 5.5.1
