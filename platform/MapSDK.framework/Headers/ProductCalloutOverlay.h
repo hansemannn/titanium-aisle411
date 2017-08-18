@@ -44,6 +44,12 @@
 @property (nonatomic, readonly) InformationBar *informationBar;
 
 /*!
+ @property hidePinsForBoughtProducts:
+ @abstract hides pins if Yes in case pin has only bought products  
+ */
+@property (nonatomic, assign) BOOL hidePinsForBoughtProducts;
+
+/*!
  @property products
  @abstract array of CMPoint-s
  */
@@ -73,6 +79,7 @@
  @abstract this objects should return the callout properties such as callout title, product name, their state, etc. this object also receives the callout actions
  */
 @property (nonatomic, assign) id<ProductCalloutOverlayDelegate> productCalloutDelegate;
+
 
 /*!
  @property updatePinImages:
