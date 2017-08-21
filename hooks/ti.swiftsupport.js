@@ -41,9 +41,7 @@ function init(logger, config, cli, appc) {
 						if (searchPaths.indexOf('@executable_path/Frameworks') === -1) {
 							searchPaths += ' @executable_path/Frameworks';
 						}
-						buildSettings.LD_RUNPATH_SEARCH_PATHS = '"' + searchPaths.trim() + '"';
-						
-						data.args[0].hash.project.objects.XCBuildConfiguration[buildConf.value].buildSettings = buildSettings
+						buildSettings.LD_RUNPATH_SEARCH_PATHS = '"' + searchPaths.trim() + '"';						
 					});
 				}
 			});
