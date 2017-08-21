@@ -22,16 +22,11 @@
       url = @"11415.imap";
     }
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:[[url lastPathComponent] stringByDeletingLastPathComponent]
-                                                     ofType:[url pathExtension]
-                                                inDirectory:@"/"];
-    
-    if (path == nil) {
-      path = [[NSURL URLWithString:url] path];
-    }
-    
-    MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:path];
-    _mapController.mapBundle = [parser parse];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+      MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:[TiUtils toURL:url proxy:self.proxy].absoluteString];
+      NSString *d = [TiUtils toURL:url proxy:self.proxy].absoluteString;
+      _mapController.mapBundle = [parser parse];
+    });
     
     UIView *mapView = [_mapController view];
     mapView.frame = self.bounds;

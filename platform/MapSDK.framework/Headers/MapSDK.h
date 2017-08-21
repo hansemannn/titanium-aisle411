@@ -1,11 +1,3 @@
-//
-//  MapSDK.h
-//  MapSDK
-//
-//  Created by voronin on 7/26/17.
-//  Copyright © 2017 com.aisle411. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 //! Project version number for MapSDK.
