@@ -13,30 +13,33 @@
 - (MapController *)mapController
 {
   if (_mapController == nil) {
+    NSString *url = [[self proxy] valueForKey:@"url"];
+
+    // Create map-controller
     _mapController = [[MapController alloc] init];
     _mapController.mapControllerDelegate = self;
     
-    // Set default values
-    _mapController.floorLevel = 1;
-    [_mapController setZoomButtonsHidden:YES];
-    [_mapController setCompassEnabled:NO];
-    
-    NSString *url = [[self proxy] valueForKey:@"url"];
-        
+    // Parse map-data
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
       MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:url];
       MapBundle *mapBundle = [parser parse];
-            
-      TiThreadPerformOnMainThread(^{
+      
+      // Parse bundle
+      dispatch_async(dispatch_get_main_queue(), ^{
         _mapController.mapBundle = mapBundle;
-      }, NO);
+        
+        // Size view
+        UIView *mapView = [_mapController view];
+        mapView.frame = self.bounds;
+        mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        // Set default values
+        [_mapController setFloor:1];
+        [_mapController setCompassEnabled:NO];
+        
+        [self addSubview:mapView];
+      });
     });
-    
-    UIView *mapView = [_mapController view];
-    mapView.frame = self.bounds;
-    mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    [self addSubview:mapView];
   }
   
   return _mapController;

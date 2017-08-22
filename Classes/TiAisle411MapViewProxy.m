@@ -43,6 +43,12 @@
   [[[self mapView] mapController] setFloor:[TiUtils intValue:floor]];
 }
 
+- (void)setZoomButtonsHidden:(id)floor
+{
+  ENSURE_TYPE(floor, NSNumber);
+  [[[self mapView] mapController] setZoomButtonsHidden:[TiUtils boolValue:floor]];
+}
+
 - (void)setLogoPosition:(id)logoPosition
 {
   ENSURE_TYPE(logoPosition, NSNumber);
