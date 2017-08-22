@@ -19,25 +19,27 @@
     _mapController = [[MapController alloc] init];
     _mapController.mapControllerDelegate = self;
     
-    // Size view
-    UIView *mapView = [_mapController view];
-    mapView.frame = self.bounds;
-    mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
-    // Set default values
-    _mapController.floorLevel = 1;
-    
     // Parse map-data
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
       MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:url];
       MapBundle *mapBundle = [parser parse];
-            
+      
+      // Parse bundle
       dispatch_async(dispatch_get_main_queue(), ^{
         _mapController.mapBundle = mapBundle;
+        
+        // Size view
+        UIView *mapView = [_mapController view];
+        mapView.frame = self.bounds;
+        mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        // Set default values
+        [_mapController setFloor:1];
+        [_mapController setCompassEnabled:NO];
+        
+        [self addSubview:mapView];
       });
     });
-    
-    [self addSubview:mapView];
   }
   
   return _mapController;
