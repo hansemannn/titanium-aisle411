@@ -8,7 +8,8 @@
 #import <MapSDK/MapSDK.h>
 
 @interface TiAisle411MapViewProxy : TiViewProxy <InformationBarDelegate, InformationBarDataSource> {
-
+  ProductCalloutOverlay *_productCallOutOverlay;
+  NSArray<NSDictionary<NSString *, id> *> *_products;
 }
 
 - (void)setFloor:(id)floor;
@@ -25,9 +26,11 @@
 
 - (void)zoomOut:(id)unused;
 
+- (void)addOverlay:(id)args;
+
 - (void)redraw:(id)unused;
 
-- (void)redrawOverlay:(id)args;
+- (void)redrawOverlay:(id)unused;
 
 - (void)reloadTiles:(id)unused;
 

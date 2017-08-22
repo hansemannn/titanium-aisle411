@@ -7,7 +7,7 @@
 #import "TiUIView.h"
 #import <MapSDK/MapController.h>
 
-@interface TiAisle411MapView : TiUIView {
+@interface TiAisle411MapView : TiUIView<MapControllerDelegate> {
 @private
   TiDimension width;
   TiDimension height;

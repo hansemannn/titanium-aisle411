@@ -56,13 +56,18 @@ Create a new map-view with `Aisle411.createMapView()`.
 - [x] `clear()`
 - [x] `zoomIn()`
 - [x] `zoomOut()`
-- [x] `redraw()`
-- [x] `redrawOverlay(args)`
+- [x] `addOverlay()`
   - `products` (Array<Object<name, id>>)
+- [x] `redraw()`
+- [x] `redrawOverlay()`
 - [x] `fadeIn(args)`
   - `zoom` (Number)
   - `relativeToScreen` (Boolean)
 - [x] `reloadTiles()`
+
+#### Events
+- [x] `load`
+- [x] `overlayitemclick`
 
 ## Author
 Hans Knöchel

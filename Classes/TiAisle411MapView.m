@@ -14,18 +14,18 @@
 {
   if (_mapController == nil) {
     _mapController = [[MapController alloc] init];
+    _mapController.mapControllerDelegate = self;
     
     NSString *url = [[self proxy] valueForKey:@"url"];
-    
-    // Dev-only
-    if (url == nil) {
-      url = @"11415.imap";
-    }
-    
+        
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-      MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:[TiUtils toURL:url proxy:self.proxy].absoluteString];
+      MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:url];
       NSString *d = [TiUtils toURL:url proxy:self.proxy].absoluteString;
-      _mapController.mapBundle = [parser parse];
+      MapBundle *mapBundle = [parser parse];
+            
+      TiThreadPerformOnMainThread(^{
+        _mapController.mapBundle = mapBundle;
+      }, NO);
     });
     
     UIView *mapView = [_mapController view];
@@ -36,6 +36,15 @@
   }
   
   return _mapController;
+}
+
+#pragma mark Map Controller Delegate
+
+- (void)mapControllerDidFinishLoading:(MapController *)aMapController
+{
+  if ([[self proxy] _hasListeners:@"load"]) {
+    [[self proxy] fireEvent:@"load"];
+  }
 }
 
 #pragma mark Layout Helper
