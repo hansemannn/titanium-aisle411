@@ -14,6 +14,17 @@
 
 @implementation TiAisle411MapViewProxy
 
+- (id)_initWithPageContext:(id<TiEvaluator>)context
+{
+  if (self = [super _initWithPageContext:context]) {
+    _productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
+    _productCallOutOverlay.informationBar.delegate = self;
+    _productCallOutOverlay.informationBar.dataSource = self;
+  }
+  
+  return self;
+}
+
 - (TiAisle411MapView *)mapView
 {
   return (TiAisle411MapView *)[self view];
@@ -64,11 +75,16 @@
   [[[self mapView] mapController] redraw];
 }
 
-- (void)redrawOverlay:(id)args
+- (void)redrawOverlay:(id)unused
+{
+  [[[self mapView] mapController] redrawOverlay:_productCallOutOverlay];
+}
+
+- (void)addOverlay:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
   
-  NSMutableArray<FMProduct *> *products = [NSMutableArray array];
+  NSMutableArray<FMProduct *> *nativeProducts = [NSMutableArray array];
   NSArray *inputProducts = [args objectForKey:@"products"];
   
   if (!inputProducts) {
@@ -76,20 +92,19 @@
     return;
   }
   
-  for (NSDictionary *inputProduct in inputProducts) {
+  _products = inputProducts;
+  
+  for (NSDictionary *inputProduct in _products) {
     FMProduct *product = [[FMProduct alloc] init];
     product.name = [inputProduct objectForKey:@"name"];
     product.idn = [TiUtils intValue:[inputProduct objectForKey:@"id"]];
     
-    [products addObject:product];
+    [nativeProducts addObject:product];
   }
   
-  ProductCalloutOverlay *productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
-  productCallOutOverlay.products = products;
-  productCallOutOverlay.informationBar.delegate = self;
-  productCallOutOverlay.informationBar.dataSource = self;
+  _productCallOutOverlay.products = nativeProducts;
   
-  [[[self mapView] mapController] redrawOverlay:productCallOutOverlay];
+  [[[self mapView] mapController] addOverlay:_productCallOutOverlay];
 }
 
 - (void)reloadTiles:(id)unused
@@ -108,22 +123,91 @@
                                 relativeToScreen:relativeToScreen.boolValue];
 }
 
-#pragma mark InformationBarDelegate
+#pragma mark Information Bar Data Source / Delegate
 
 - (void)informationBar:(InformationBar *)informationBar didSelectRowAtIndex:(NSInteger)rowIndex forItem:(OverlayItem *)item
 {
-  if ([self _hasListeners:@"didSelectItem"]) {
-    [self fireEvent:@"didSelectItem" withObject:@{@"title": item.title}]; // Return more if desired
+  if ([self _hasListeners:@"overlayitemclick"]) {
+    [self fireEvent:@"overlayitemclick" withObject:@{@"title": item.title}]; // Return more if desired
   }
 }
 
-#pragma mark InformationBarDataSource
+- (NSInteger)informationBar:(InformationBar*)informationBar numberOfRowsForItem:(OverlayItem*)item
+{
+  return [[(ProductOverlayItem *)item products] count];
+}
 
-- (BOOL)informationBar:(InformationBar *)informationBar fixedForItem:(OverlayItem *)item
+- (UITableViewCell *)informationBar:(InformationBar*)informationBar cellForRowAtIndex:(NSInteger) rowIndex forItem:(OverlayItem*)item
+{
+  UITableViewCell *cell = [informationBar dequeueReusableCellWithIdentifier:@"Cell"];
+  
+  if (cell == nil) {
+    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
+  }
+  
+  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
+  FMProduct *product = [productItem.products objectAtIndex:rowIndex];
+  NSDictionary *proxyProduct = [_products objectAtIndex:rowIndex];
+  
+  NSMutableAttributedString *attributedString = nil;
+  
+  // Strike through or not
+  if ([proxyProduct valueForKey:@"isPickedUp"]) {
+    attributedString = [[NSMutableAttributedString alloc] initWithString:product.name];
+    [attributedString addAttribute:NSStrikethroughStyleAttributeName value:@2 range:NSMakeRange(0, attributedString.length)];
+  } else {
+    attributedString = [[NSMutableAttributedString alloc] initWithString:product.name];
+  }
+  
+  cell.textLabel.attributedText = attributedString;
+  cell.selectionStyle = UITableViewCellSelectionStyleNone;
+  
+  return cell;
+}
+
+- (NSString *)informationBar:(InformationBar*)informationBar keywordForItem:(OverlayItem*)item
+{
+  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
+  FMProduct *firstProduct = [[productItem products] firstObject];
+  
+  return [firstProduct name] ?: @"";
+}
+
+
+- (BOOL)informationBar:(InformationBar*)informationBar fixedForItem:(OverlayItem*)item
 {
   [item setDisabled:YES]; // Disable items
-
   return YES;
+ 
+}
+
+- (NSString*)informationBar:(InformationBar*)informationBar collapsedInstructionsForItem:(OverlayItem*)item
+{
+  return @"";
+}
+
+- (NSString*)informationBar:(InformationBar*)informationBar expandedInstructionsForItem:(OverlayItem*)item
+{
+  return @"";
+}
+
+- (NSString*)informationBar:(InformationBar*)informationBar locationForItem:(OverlayItem*)item
+{
+  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
+  FMProduct *product = productItem.products.firstObject;
+  FMSection *sectionForOverlay = [[FMSection alloc] init];
+  
+  for (FMSection *section in product.sections) {
+    if (section.maplocation == item.maplocation) {
+      sectionForOverlay = section;
+    }
+  }
+  
+  if (sectionForOverlay == nil) {
+    NSLog(@"[ERROR] Logic-error: sectionForOverlay should be non-nil at this point!");
+  }
+  
+  return sectionForOverlay.aisleTitle;
 }
 
 #pragma mark Layout Helper

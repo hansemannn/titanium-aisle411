@@ -42,10 +42,11 @@ Use the Aisle411 iOS-SDK in Axway Titanium.
   - `callback` (Callback)
 
 ### `MapView`
-Create a new map-view with Aisle411.createMapView()
+Create a new map-view with `Aisle411.createMapView()`.
 
 #### Properties
 
+- [x] `url` (use the `e.url` from the `requestCachedRasterMap` callback)
 - [x] `floor`
 - [x] `logoPosition`
 - [x] `compassEnabled`
@@ -55,13 +56,18 @@ Create a new map-view with Aisle411.createMapView()
 - [x] `clear()`
 - [x] `zoomIn()`
 - [x] `zoomOut()`
-- [x] `redraw()`
-- [x] `redrawOverlay(args)`
+- [x] `addOverlay()`
   - `products` (Array<Object<name, id>>)
+- [x] `redraw()`
+- [x] `redrawOverlay()`
 - [x] `fadeIn(args)`
   - `zoom` (Number)
   - `relativeToScreen` (Boolean)
 - [x] `reloadTiles()`
+
+#### Events
+- [x] `load`
+- [x] `overlayitemclick`
 
 ## Author
 Hans Knöchel
