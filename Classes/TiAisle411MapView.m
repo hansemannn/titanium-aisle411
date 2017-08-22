@@ -16,11 +16,15 @@
     _mapController = [[MapController alloc] init];
     _mapController.mapControllerDelegate = self;
     
+    // Set default values
+    _mapController.floorLevel = 1;
+    [_mapController setZoomButtonsHidden:YES];
+    [_mapController setCompassEnabled:NO];
+    
     NSString *url = [[self proxy] valueForKey:@"url"];
         
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
       MapBundleParser *parser = [[MapBundleParser alloc] initWithPathToArchive:url];
-      NSString *d = [TiUtils toURL:url proxy:self.proxy].absoluteString;
       MapBundle *mapBundle = [parser parse];
             
       TiThreadPerformOnMainThread(^{

@@ -14,6 +14,11 @@
 
 @implementation TiAisle411MapViewProxy
 
+- (NSArray *)keySequence
+{
+  return @[@"url"];
+}
+
 - (id)_initWithPageContext:(id<TiEvaluator>)context
 {
   if (self = [super _initWithPageContext:context]) {
@@ -48,6 +53,12 @@
 {
   ENSURE_TYPE(compassEnabled, NSNumber);
   [[[self mapView] mapController] setCompassEnabled:[TiUtils boolValue:compassEnabled]];
+}
+
+- (void)setBackgroundColor:(id)backgroundColor
+{
+  ENSURE_TYPE(backgroundColor, NSString);
+  [[[self mapView] mapController] setMapBackgroundColor:[TiUtils colorValue:backgroundColor].color];
 }
 
 - (void)deselectAll:(id)unused
