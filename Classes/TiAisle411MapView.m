@@ -26,8 +26,6 @@
 
     // Set default values
     _mapController.floorLevel = 1;
-    [_mapController setZoomButtonsHidden:YES];
-    [_mapController setCompassEnabled:NO];
     
     // Parse map-data
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{

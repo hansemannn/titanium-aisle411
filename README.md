@@ -46,10 +46,11 @@ Create a new map-view with `Aisle411.createMapView()`.
 
 #### Properties
 
-- [x] `url` (use the `e.url` from the `requestCachedRasterMap` callback)
+- [x] `url` (use the `e.path` from the `requestCachedRasterMap` callback)
 - [x] `floor`
 - [x] `logoPosition`
 - [x] `compassEnabled`
+- [x] `zoomButtonsHidden`
 
 #### Methods
 
