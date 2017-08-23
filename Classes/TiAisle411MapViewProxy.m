@@ -12,6 +12,8 @@
 #import <MapSDK/FMProduct.h>
 #import <MapSDK/ProductCalloutOverlay.h>
 
+#define PUBLIXCOLOR [UIColor colorWithRed:47/255 green:136/255 blue:15/255 alpha:1.0]
+
 @implementation TiAisle411MapViewProxy
 
 - (NSArray *)keySequence
@@ -23,8 +25,18 @@
 {
   if (self = [super _initWithPageContext:context]) {
     _productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
-    _productCallOutOverlay.informationBar.delegate = self;
-    _productCallOutOverlay.informationBar.dataSource = self;
+    
+    BOOL shoppingModeEnabled = [TiUtils boolValue:[self valueForKey:@"shoppingModeEnabled"] def:NO];
+    
+    InformationBar *informationBar = _productCallOutOverlay.informationBar;
+    informationBar.backgroundColor = UIColor.whiteColor;
+    [informationBar setLocationLabelBackgroundColor:PUBLIXCOLOR];
+    informationBar.delegate = self;
+    informationBar.dataSource = self;
+    [informationBar hideInstructionLine:!shoppingModeEnabled];
+    [informationBar hideInstructionLabel:!shoppingModeEnabled];
+    
+    [[informationBar table] registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];    
   }
   
   return self;
@@ -92,17 +104,13 @@
   [[[self mapView] mapController] redraw];
 }
 
-- (void)redrawOverlay:(id)unused
+- (void)redrawOverlay:(id)args
 {
-  [[[self mapView] mapController] redrawOverlay:_productCallOutOverlay];
-}
-
-- (void)addOverlay:(id)args
-{
-  ENSURE_SINGLE_ARG(args, NSDictionary);
-  
-  NSMutableArray<FMProduct *> *nativeProducts = [NSMutableArray array];
+  ENSURE_SINGLE_ARG_OR_NIL(args, NSDictionary);
+    
+  NSArray *venueItems = [args objectForKey:@"venueItems"];
   NSArray *inputProducts = [args objectForKey:@"products"];
+  NSMutableArray<FMProduct *> *nativeProducts = [NSMutableArray array];
   
   if (!inputProducts) {
     NSLog(@"[ERROR] Missing required parameter 'products!'");
@@ -111,16 +119,47 @@
   
   _products = inputProducts;
   
+  assert(venueItems.count == _products.count);
+  
   for (NSDictionary *inputProduct in _products) {
     FMProduct *product = [[FMProduct alloc] init];
+    NSDictionary *venueItem = [venueItems objectAtIndex:[_products indexOfObject:inputProduct]];
+    
     product.name = [inputProduct objectForKey:@"name"];
     product.idn = [TiUtils intValue:[inputProduct objectForKey:@"id"]];
+    product.checked = [TiUtils boolValue:[inputProduct objectForKey:@"isPickedUp"] def:NO];
     
+    NSArray *sections = (NSArray *)[venueItem objectForKey:@"sections"];
+    NSMutableArray<FMSection *> *productSectionArray = [NSMutableArray arrayWithCapacity:[sections count]];
+
+    for (NSDictionary *section in sections) {
+      FMSection *newSection = [[FMSection alloc] init];
+      newSection.maplocation = [(NSNumber *)[section valueForKey:@"mapPointId"] integerValue];
+      
+      if (newSection.maplocation == 0) {
+        continue;
+      }
+      
+      newSection.aisleTitle = [section valueForKey:@"aisle"];
+      newSection.title = [section valueForKey:@"section"];
+      
+      [productSectionArray addObject:newSection];
+    }
+    
+    product.sections = productSectionArray;
     [nativeProducts addObject:product];
   }
   
   _productCallOutOverlay.products = nativeProducts;
   
+  TiThreadPerformOnMainThread(^{
+    [[[self mapView] mapController] redrawOverlay:_productCallOutOverlay];
+  }, NO);
+}
+
+- (void)addOverlay:(id)args
+{
+  ENSURE_SINGLE_ARG(args, NSDictionary);
   [[[self mapView] mapController] addOverlay:_productCallOutOverlay];
 }
 

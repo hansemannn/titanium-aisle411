@@ -65,35 +65,56 @@
   ENSURE_SINGLE_ARG(args, NSDictionary);
   
   NSNumber *venueId = [args objectForKey:@"venueId"];
-  NSString *term = [args objectForKey:@"term"];
-  NSNumber *startingIndex = [args objectForKey:@"startingIndex"];
-  NSNumber *endingIndex = [args objectForKey:@"endingIndex"];
-  NSNumber *maxCount = [args objectForKey:@"maxCount"];
+  NSString *name = [args objectForKey:@"name"];
+  NSArray *products = [args objectForKey:@"products"]; // { name: '', id: '', section: '', ... }
   KrollCallback *callback = [args objectForKey:@"callback"];
   
   AisleServer *server = [AisleServer shared];
+  
+  NSMutableArray *items = [NSMutableArray arrayWithCapacity:products.count];
+  
+  for (NSDictionary *item in products) {
+    [items addObject:@{@"name": [item valueForKey:@"sectionCode"] ?: @""}];
+  }
+  
   [server searchWithVenueWithId:venueId.integerValue
-                        forTerm:term
-              withStartingIndex:startingIndex.integerValue
-                 andEndingIndex:endingIndex.integerValue
-                   withMaxCount:maxCount.integerValue
-              withResponseBlock:^(NSArray<IVKVenueItem *> *venues, NSArray<IVKError *> *errors) {
+         forItemsFromDictionary:@{@"name": name, @"items": items}
+              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
                 if (errors.count > 0) {
                   [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
                   return;
                 }
                 
-                NSMutableArray *dictVenues = [NSMutableArray arrayWithCapacity:venues.count];
+                NSMutableArray *dictVenues = [NSMutableArray arrayWithCapacity:venueItems.count];
                 
-                for (IVKVenueItem *venueItem in venues) {
+                for (IVKVenueItem *venueItem in venueItems) {
                   [dictVenues addObject:@{
-                    @"name": venueItem.name,
                     @"id": NUMINTEGER(venueItem.id),
+                    @"name": venueItem.name,
+                    @"price": NUMDOUBLE(venueItem.price),
+                    @"discountedPrice": NUMDOUBLE(venueItem.discountedPrice),
+                    @"section": venueItem.sectionName,
+                    @"sections": [TiAisle411Module arrayFromSections:venueItem.sections],
                     @"venueItemTypeName": venueItem.venueItemTypeName, // More to be exposed here
                   }];
                 }
-                [callback call:@[@{@"venues": dictVenues}] thisObject:self];
-                         }];
+                [callback call:@[@{@"venueItems": dictVenues}] thisObject:self];
+              }];
+}
+
++ (NSArray *)arrayFromSections:(NSArray<IVKSection *> *)sections
+{
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:sections.count];
+  
+  for (IVKSection *section in sections) {
+    [result addObject:@{
+      @"aisle": section.aisle,
+      @"mapPointId": NUMINTEGER(section.mapPointId),
+      @"section": section.section
+    }];
+  }
+  
+  return result;
 }
 
 #pragma mark Constants
