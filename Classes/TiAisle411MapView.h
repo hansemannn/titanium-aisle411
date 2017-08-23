@@ -5,16 +5,19 @@
  * Please see the LICENSE included with this distribution for details.
  */
 #import "TiUIView.h"
-#import <MapSDK/MapController.h>
+#import <MapSDK/MapSDK.h>
 
-@interface TiAisle411MapView : TiUIView<MapControllerDelegate> {
+@interface TiAisle411MapView : TiUIView <MapControllerDelegate, InformationBarDelegate, InformationBarDataSource, CalloutOverlayDelegate> {
 @private
   TiDimension width;
   TiDimension height;
   CGFloat autoHeight;
   CGFloat autoWidth;
 
+  ProductCalloutOverlay *_productCallOutOverlay;
 }
+
+- (ProductCalloutOverlay *)overlay;
 
 @property(nonatomic, strong) MapController *mapController;
 

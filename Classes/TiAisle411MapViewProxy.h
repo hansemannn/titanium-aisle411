@@ -5,12 +5,11 @@
  * Please see the LICENSE included with this distribution for details.
  */
 #import "TiViewProxy.h"
-#import <MapSDK/MapSDK.h>
 
-@interface TiAisle411MapViewProxy : TiViewProxy <InformationBarDelegate, InformationBarDataSource> {
-  ProductCalloutOverlay *_productCallOutOverlay;
-  NSArray<NSDictionary<NSString *, id> *> *_products;
+@interface TiAisle411MapViewProxy : TiViewProxy {
 }
+
+@property (nonatomic, strong) NSArray<NSDictionary<NSString *, id> *> *products;
 
 - (void)setFloor:(id)floor;
 
@@ -25,8 +24,6 @@
 - (void)zoomIn:(id)unused;
 
 - (void)zoomOut:(id)unused;
-
-- (void)addOverlay:(id)args;
 
 - (void)redraw:(id)unused;
 

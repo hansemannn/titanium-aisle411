@@ -10,7 +10,7 @@
 #import "TiHost.h"
 #import "TiUtils.h"
 
-#import <MapSDK/MapController.h>
+#import <MapSDK/MapSDK.h>
 #import <AisleNetworking/AisleNetworking-Swift.h>
 
 @implementation TiAisle411Module
