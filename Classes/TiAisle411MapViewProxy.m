@@ -18,15 +18,16 @@
 
 - (NSArray *)keySequence
 {
-  return @[@"url"];
+  return @[@"url", @"shoppingModeEnabled"];
 }
 
-- (id)_initWithPageContext:(id<TiEvaluator>)context
+- (id)_initWithPageContext:(id<TiEvaluator>)context args:(NSArray *)args
 {
-  if (self = [super _initWithPageContext:context]) {
+  if (self = [super _initWithPageContext:context args:args]) {
     _productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
     
-    BOOL shoppingModeEnabled = [TiUtils boolValue:[self valueForKey:@"shoppingModeEnabled"] def:NO];
+    NSDictionary *params = [args objectAtIndex:0];
+    BOOL shoppingModeEnabled = [TiUtils boolValue:[params valueForKey:@"shoppingModeEnabled"] def:NO];
     
     InformationBar *informationBar = _productCallOutOverlay.informationBar;
     informationBar.backgroundColor = UIColor.whiteColor;
