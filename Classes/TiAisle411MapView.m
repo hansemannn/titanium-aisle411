@@ -117,11 +117,19 @@
 
 - (NSInteger)informationBar:(InformationBar*)informationBar numberOfRowsForItem:(OverlayItem*)item
 {
+  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+    return 0;
+  }
+
   return [[(ProductOverlayItem *)item products] count];
 }
 
 - (UITableViewCell *)informationBar:(InformationBar*)informationBar cellForRowAtIndex:(NSInteger) rowIndex forItem:(OverlayItem*)item
 {
+  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+    return nil;
+  }
+  
   UITableViewCell *cell = [informationBar dequeueReusableCellWithIdentifier:@"Cell"];
   
   if (cell == nil) {
@@ -140,6 +148,13 @@
 
 - (NSString *)informationBar:(InformationBar*)informationBar keywordForItem:(OverlayItem*)item
 {
+  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+    ProductOverlayItem *productItem = (ProductOverlayItem *)item;
+    FMProduct *firstProduct = [[productItem products] firstObject];
+
+    return [firstProduct name] ?: @"";
+  }
+  
   ProductOverlayItem *spItem = (ProductOverlayItem *)item;
   NSInteger itemCount = spItem.products.count;
   
@@ -163,11 +178,6 @@
   }
   
   return _keywordText;
-    
-//  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
-//  FMProduct *firstProduct = [[productItem products] firstObject];
-//  
-//  return [firstProduct name] ?: @"";
 }
 
 - (void)informationBarDidShowTable:(InformationBar *)informationBar
@@ -182,20 +192,29 @@
 
 - (BOOL)informationBar:(InformationBar*)informationBar fixedForItem:(OverlayItem*)item
 {
-//  [item setDisabled:YES]; // Disable items
-//  return NO;
-
-  return NO;
+  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+    return YES;
+  } else {
+    return NO;
+  }
 }
 
 - (NSString*)informationBar:(InformationBar*)informationBar collapsedInstructionsForItem:(OverlayItem*)item
 {
-  return @"Slide up for items in this section";
+  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+    return @"";
+  } else {
+    return @"Slide up for items in this section";
+  }
 }
 
 - (NSString*)informationBar:(InformationBar*)informationBar expandedInstructionsForItem:(OverlayItem*)item
 {
-  return @"Slide down to close";
+  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+    return @"";
+  } else {
+    return @"Slide down to close";
+  }
 }
 
 - (NSString*)informationBar:(InformationBar*)informationBar locationForItem:(OverlayItem*)item
