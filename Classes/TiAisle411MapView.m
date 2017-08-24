@@ -92,6 +92,22 @@
 
 - (void)informationBar:(InformationBar *)informationBar didSelectRowAtIndex:(NSInteger)rowIndex forItem:(OverlayItem *)item
 {
+  ProductOverlayItem *spItem = (ProductOverlayItem *)item;
+  FMProduct *selectedProduct = spItem.products[rowIndex];
+  
+  NSDictionary *publixProduct = [[[self mapViewProxy] products] objectAtIndex:rowIndex];
+  BOOL isPickedUp = [TiUtils boolValue:[publixProduct valueForKey:@"isPickedUp"] def:NO];
+  
+  if (publixProduct == nil) {
+    return;
+  }
+  
+  [publixProduct setValue:@(!isPickedUp) forKey:@"isPickedUp"];
+  selectedProduct.checked = !isPickedUp;
+  
+  UITableViewCell *cell = informationBar.table.visibleCells[rowIndex];
+  cell.textLabel.attributedText = [TiAisle411MapView cellTitleForProduct:selectedProduct andDictionary:publixProduct];
+  
   if ([[self proxy] _hasListeners:@"informationBarItemClick"]) {
     [[self proxy] fireEvent:@"informationBarItemClick" withObject:@{@"title": item.title}]; // Return more if desired
   }
@@ -114,17 +130,7 @@
   FMProduct *product = [productItem.products objectAtIndex:rowIndex];
   NSDictionary *proxyProduct = [[[self mapViewProxy] products] objectAtIndex:rowIndex];
   
-  NSMutableAttributedString *attributedString = nil;
-  
-  // Strike through or not
-  if ([proxyProduct valueForKey:@"isPickedUp"]) {
-    attributedString = [[NSMutableAttributedString alloc] initWithString:product.name];
-    [attributedString addAttribute:NSStrikethroughStyleAttributeName value:@2 range:NSMakeRange(0, attributedString.length)];
-  } else {
-    attributedString = [[NSMutableAttributedString alloc] initWithString:product.name];
-  }
-  
-  cell.textLabel.attributedText = attributedString;
+  cell.textLabel.attributedText = [TiAisle411MapView cellTitleForProduct:product andDictionary:proxyProduct];
   cell.selectionStyle = UITableViewCellSelectionStyleNone;
   
   return cell;
@@ -137,7 +143,6 @@
   
   return [firstProduct name] ?: @"";
 }
-
 
 - (BOOL)informationBar:(InformationBar*)informationBar fixedForItem:(OverlayItem*)item
 {
@@ -214,6 +219,19 @@
 }
 
 #pragma mark Layout Helper
+
++ (NSAttributedString *)cellTitleForProduct:(FMProduct *)product andDictionary:(NSDictionary *)proxyProduct
+{
+  // Strike through or not
+  if ([TiUtils boolValue:[proxyProduct valueForKey:@"isPickedUp"] def:NO]) {
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:product.name];
+    [attributedString addAttribute:NSStrikethroughStyleAttributeName value:@(2) range:NSMakeRange(0, attributedString.length)];
+    
+    return attributedString;
+  } else {
+    return [[NSMutableAttributedString alloc] initWithString:product.name];
+  }
+}
 
 - (void)updateContentMode
 {
