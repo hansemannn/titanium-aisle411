@@ -16,6 +16,7 @@
   CGFloat autoWidth;
 
   ProductCalloutOverlay *_productCallOutOverlay;
+  NSString *_keywordText;
 }
 
 - (ProductCalloutOverlay *)overlay;

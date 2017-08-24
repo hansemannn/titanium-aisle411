@@ -140,10 +140,44 @@
 
 - (NSString *)informationBar:(InformationBar*)informationBar keywordForItem:(OverlayItem*)item
 {
-  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
-  FMProduct *firstProduct = [[productItem products] firstObject];
+  ProductOverlayItem *spItem = (ProductOverlayItem *)item;
+  NSInteger itemCount = spItem.products.count;
   
-  return [firstProduct name] ?: @"";
+  switch (itemCount) {
+    case 1: {
+      FMProduct *onlyProduct = [spItem.products objectAtIndex:0];
+      _keywordText = onlyProduct.name;
+    }
+    break;
+    case 2: {
+      FMProduct *firstProduct = [spItem.products objectAtIndex:0];
+      FMProduct *secondProduct = [spItem.products objectAtIndex:1];
+      _keywordText = [NSString stringWithFormat:@"%@ and %@ ", firstProduct.name, secondProduct.name];
+    }
+    break;
+    default: {
+    FMProduct *firstProduct = [spItem.products objectAtIndex:0];
+    _keywordText = [NSString stringWithFormat:@"%@ and %li other items", firstProduct.name, itemCount - 1];
+    }
+    break;
+  }
+  
+  return _keywordText;
+    
+//  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
+//  FMProduct *firstProduct = [[productItem products] firstObject];
+//  
+//  return [firstProduct name] ?: @"";
+}
+
+- (void)informationBarDidShowTable:(InformationBar *)informationBar
+{
+  [informationBar setKeyWordLabelText:@"Items in this section"];
+}
+
+- (void)informationBarDidHideTable:(InformationBar *)informationBar
+{
+  [informationBar setKeyWordLabelText:_keywordText];
 }
 
 - (BOOL)informationBar:(InformationBar*)informationBar fixedForItem:(OverlayItem*)item
