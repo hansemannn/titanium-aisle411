@@ -59,6 +59,8 @@
         [_mapController setFloor:1];
         [_mapController setCompassEnabled:NO];
         
+        [_mapController addOverlay:_productCallOutOverlay];
+        
         [self addSubview:mapView];
       });
     });
@@ -177,6 +179,9 @@
 
 - (void)calloutOverlay:(CalloutOverlay*)overlay didItemSelected:(OverlayItem*)item
 {
+  UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
+  [item setImage:selected];
+  
   if ([[self proxy] _hasListeners:@"didItemSelected"]) {
     [[self proxy] fireEvent:@"didItemSelected" withObject:@{@"item": item.title}];
   }
@@ -184,6 +189,12 @@
 
 - (void)calloutOverlay:(CalloutOverlay*)overlay didItemReselected:(OverlayItem*)oldItem withItem:(OverlayItem*)item
 {
+  UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
+  UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
+
+  [oldItem setImage:unselected];
+  [item setImage:selected];
+
   if ([[self proxy] _hasListeners:@"didItemReselected"]) {
     [[self proxy] fireEvent:@"didItemReselected" withObject:@{@"item": item.title}];
   }
@@ -191,6 +202,8 @@
 
 - (void)calloutOverlay:(CalloutOverlay*)overlay didItemDeselected:(OverlayItem*)item
 {
+  UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
+
   if ([[self proxy] _hasListeners:@"didItemDeselected"]) {
     [[self proxy] fireEvent:@"didItemDeselected" withObject:@{@"item": item.title}];
   }
@@ -198,7 +211,7 @@
 
 - (BOOL)calloutOverlay:(CalloutOverlay*)overlay shouldZoom:(OverlayItem*)item
 {
-  return [TiUtils boolValue:[self valueForKey:@"zoomEnabled"] def:YES];
+  return NO;
 }
 
 #pragma mark Layout Helper

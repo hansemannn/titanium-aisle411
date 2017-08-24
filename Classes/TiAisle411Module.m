@@ -80,7 +80,7 @@
   [server searchWithVenueWithId:venueId.integerValue
          forItemsFromDictionary:@{@"name": name, @"items": items}
               withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
-                if (errors.count > 0) {
+                if (errors.count > 0 ) {
                   [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
                   return;
                 }
@@ -110,7 +110,7 @@
     [result addObject:@{
       @"aisle": section.aisle,
       @"mapPointId": NUMINTEGER(section.mapPointId),
-      @"section": section.section
+      @"section": section.section,
     }];
   }
   

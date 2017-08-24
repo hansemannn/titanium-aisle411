@@ -86,7 +86,7 @@
     
   NSArray *venueItems = [args objectForKey:@"venueItems"];
   NSArray *inputProducts = [args objectForKey:@"products"];
-  NSMutableArray<FMProduct *> *nativeProducts = [NSMutableArray array];
+  NSMutableArray<FMProduct *> *sdkProducts = [NSMutableArray array];
   
   if (!inputProducts) {
     NSLog(@"[ERROR] Missing required parameter 'products!'");
@@ -123,10 +123,10 @@
     }
     
     product.sections = productSectionArray;
-    [nativeProducts addObject:product];
+    [sdkProducts addObject:product];
   }
   
-  [[self overlay] setProducts:nativeProducts];
+  [[self overlay] setProducts:sdkProducts];
   
   TiThreadPerformOnMainThread(^{
     [[[self mapView] mapController] redrawOverlay:[self overlay]];
