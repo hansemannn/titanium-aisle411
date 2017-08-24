@@ -203,6 +203,7 @@
 - (void)calloutOverlay:(CalloutOverlay*)overlay didItemDeselected:(OverlayItem*)item
 {
   UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
+  [item setImage:unselected];
 
   if ([[self proxy] _hasListeners:@"didItemDeselected"]) {
     [[self proxy] fireEvent:@"didItemDeselected" withObject:@{@"item": item.title}];
