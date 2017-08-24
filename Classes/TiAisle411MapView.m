@@ -16,11 +16,10 @@
 {
   if (_mapController == nil) {
     NSString *url = [[self proxy] valueForKey:@"url"];
-    BOOL shoppingModeEnabled = [TiUtils boolValue:[[self proxy] valueForKey:@"shoppingModeEnabled"] def:NO];
     UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
     UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
-    
-    _mapMode = [TiUtils intValue:[[self proxy] valueForKey:@"mapMode"] def:TiAisle411SearchTypeShoppingList];
+
+    _shoppingModeEnabled = [TiUtils boolValue:[[self proxy] valueForKey:@"shoppingModeEnabled"] def:NO];
 
     // Create callout-overlay
     _productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
@@ -34,8 +33,8 @@
     [informationBar setLocationLabelBackgroundColor:PUBLIXCOLOR];
     informationBar.dataSource = self;
     informationBar.delegate = self;
-    [informationBar hideInstructionLine:!shoppingModeEnabled];
-    [informationBar hideInstructionLabel:!shoppingModeEnabled];
+    [informationBar hideInstructionLine:!_shoppingModeEnabled];
+    [informationBar hideInstructionLabel:!_shoppingModeEnabled];
     
     [[informationBar table] registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
 
@@ -117,7 +116,7 @@
 
 - (NSInteger)informationBar:(InformationBar*)informationBar numberOfRowsForItem:(OverlayItem*)item
 {
-  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+  if (_shoppingModeEnabled == NO) {
     return 0;
   }
 
@@ -126,7 +125,7 @@
 
 - (UITableViewCell *)informationBar:(InformationBar*)informationBar cellForRowAtIndex:(NSInteger) rowIndex forItem:(OverlayItem*)item
 {
-  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+  if (_shoppingModeEnabled == NO) {
     return nil;
   }
   
@@ -148,7 +147,7 @@
 
 - (NSString *)informationBar:(InformationBar*)informationBar keywordForItem:(OverlayItem*)item
 {
-  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+  if (_shoppingModeEnabled == NO) {
     ProductOverlayItem *productItem = (ProductOverlayItem *)item;
     FMProduct *firstProduct = [[productItem products] firstObject];
 
@@ -192,7 +191,7 @@
 
 - (BOOL)informationBar:(InformationBar*)informationBar fixedForItem:(OverlayItem*)item
 {
-  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+  if (_shoppingModeEnabled == NO) {
     return YES;
   } else {
     return NO;
@@ -201,7 +200,7 @@
 
 - (NSString*)informationBar:(InformationBar*)informationBar collapsedInstructionsForItem:(OverlayItem*)item
 {
-  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+  if (_shoppingModeEnabled == NO) {
     return @"";
   } else {
     return @"Slide up for items in this section";
@@ -210,7 +209,7 @@
 
 - (NSString*)informationBar:(InformationBar*)informationBar expandedInstructionsForItem:(OverlayItem*)item
 {
-  if (_mapMode == TiAisle411SearchTypeFulltextSearch) {
+  if (_shoppingModeEnabled == NO) {
     return @"";
   } else {
     return @"Slide down to close";

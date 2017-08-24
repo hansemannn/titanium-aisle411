@@ -14,11 +14,6 @@
 
 @implementation TiAisle411MapViewProxy
 
-- (NSArray *)keySequence
-{
-  return @[@"mapMode"];
-}
-
 - (TiAisle411MapView *)mapView
 {
   return (TiAisle411MapView *)[self view];
@@ -61,10 +56,10 @@
   [[[self mapView] mapController] setMapBackgroundColor:[TiUtils colorValue:backgroundColor].color];
 }
 
-- (void)setMapMode:(id)mapMode
+- (void)setShoppingModeEnabled:(id)shoppingModeEnabled
 {
-  ENSURE_TYPE(mapMode, NSNumber);
-  [[self mapView] setMapMode:[TiUtils intValue:mapMode def:TiAisle411SearchTypeShoppingList]];
+  ENSURE_TYPE(shoppingModeEnabled, NSNumber);
+  [[self mapView] setShoppingModeEnabled:[TiUtils boolValue:shoppingModeEnabled def:YES]];
 }
 
 - (void)deselectAll:(id)unused
@@ -166,12 +161,10 @@
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
   
-  if ([[self mapView] mapMode] == TiAisle411SearchTypeShoppingList) {
+  if ([TiUtils boolValue:[self valueForKey:@"shoppingModeEnabled"] def:NO]) {
     [self _searchInShoppingList:args];
-  } else if ([[self mapView] mapMode] == TiAisle411SearchTypeFulltextSearch) {
-    [self _searchWithFulltext:args];
   } else {
-    NSLog(@"[ERROR] Unknown type provided. Please pass either SEARCH_TYPE_FULLTEXT or SEARCH_TYPE_SHOPPING_LIST");
+    [self _searchWithFulltext:args];
   }
 }
 

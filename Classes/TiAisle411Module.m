@@ -6,7 +6,6 @@
  */
 
 #import "TiAisle411Module.h"
-#import "TiAisle411Constants.h"
 #import "TiBase.h"
 #import "TiHost.h"
 #import "TiUtils.h"
@@ -65,8 +64,5 @@
 
 MAKE_SYSTEM_PROP(AISLE_LOGO_POSITION_RIGHT_BOTTOM, AisleLogoRightBottomPosition);
 MAKE_SYSTEM_PROP(AISLE_LOGO_POSITION_LEFT_BOTTOM, AisleLogoLeftBottomPosition);
-
-MAKE_SYSTEM_PROP(SEARCH_TYPE_FULLTEXT, TiAisle411SearchTypeFulltextSearch);
-MAKE_SYSTEM_PROP(SEARCH_TYPE_SHOPPING_LIST, TiAisle411SearchTypeShoppingList);
 
 @end
