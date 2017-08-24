@@ -17,10 +17,14 @@
   if (_mapController == nil) {
     NSString *url = [[self proxy] valueForKey:@"url"];
     BOOL shoppingModeEnabled = [TiUtils boolValue:[[self proxy] valueForKey:@"shoppingModeEnabled"] def:NO];
-
+    UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
+    UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
+    
     // Create callout-overlay
     _productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
     _productCallOutOverlay.delegate = self;
+    _productCallOutOverlay.image = unselected;
+    _productCallOutOverlay.selectedImage = selected;
     
     // Configure information-bar
     InformationBar *informationBar = _productCallOutOverlay.informationBar;
