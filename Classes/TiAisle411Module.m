@@ -6,11 +6,12 @@
  */
 
 #import "TiAisle411Module.h"
+#import "TiAisle411Constants.h"
 #import "TiBase.h"
 #import "TiHost.h"
 #import "TiUtils.h"
 
-#import <MapSDK/MapController.h>
+#import <MapSDK/MapSDK.h>
 #import <AisleNetworking/AisleNetworking-Swift.h>
 
 @implementation TiAisle411Module
@@ -60,45 +61,12 @@
                          }];
 }
 
-- (void)search:(id)args
-{
-  ENSURE_SINGLE_ARG(args, NSDictionary);
-  
-  NSNumber *venueId = [args objectForKey:@"venueId"];
-  NSString *term = [args objectForKey:@"term"];
-  NSNumber *startingIndex = [args objectForKey:@"startingIndex"];
-  NSNumber *endingIndex = [args objectForKey:@"endingIndex"];
-  NSNumber *maxCount = [args objectForKey:@"maxCount"];
-  KrollCallback *callback = [args objectForKey:@"callback"];
-  
-  AisleServer *server = [AisleServer shared];
-  [server searchWithVenueWithId:venueId.integerValue
-                        forTerm:term
-              withStartingIndex:startingIndex.integerValue
-                 andEndingIndex:endingIndex.integerValue
-                   withMaxCount:maxCount.integerValue
-              withResponseBlock:^(NSArray<IVKVenueItem *> *venues, NSArray<IVKError *> *errors) {
-                if (errors.count > 0) {
-                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
-                  return;
-                }
-                
-                NSMutableArray *dictVenues = [NSMutableArray arrayWithCapacity:venues.count];
-                
-                for (IVKVenueItem *venueItem in venues) {
-                  [dictVenues addObject:@{
-                    @"name": venueItem.name,
-                    @"id": NUMINTEGER(venueItem.id),
-                    @"venueItemTypeName": venueItem.venueItemTypeName, // More to be exposed here
-                  }];
-                }
-                [callback call:@[@{@"venues": dictVenues}] thisObject:self];
-                         }];
-}
-
 #pragma mark Constants
 
 MAKE_SYSTEM_PROP(AISLE_LOGO_POSITION_RIGHT_BOTTOM, AisleLogoRightBottomPosition);
 MAKE_SYSTEM_PROP(AISLE_LOGO_POSITION_LEFT_BOTTOM, AisleLogoLeftBottomPosition);
+
+MAKE_SYSTEM_PROP(SEARCH_TYPE_FULLTEXT, TiAisle411SearchTypeFulltextSearch);
+MAKE_SYSTEM_PROP(SEARCH_TYPE_SHOPPING_LIST, TiAisle411SearchTypeShoppingList);
 
 @end

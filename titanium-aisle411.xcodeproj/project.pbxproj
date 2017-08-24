@@ -53,6 +53,7 @@
 		24DE9E1011C5FE74003F90F6 /* TiAisle411ModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiAisle411ModuleAssets.m; path = Classes/TiAisle411ModuleAssets.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* TiAisle411_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiAisle411_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		D2AAC07E0554694100DB518D /* libti.aisle411.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libti.aisle411.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB17C6451F4F386A001BB60E /* TiAisle411Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TiAisle411Constants.h; sourceTree = "<group>"; };
 		DB46FDD51F43A0ED004C4CCC /* TiAisle411MapViewProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiAisle411MapViewProxy.h; path = Classes/TiAisle411MapViewProxy.h; sourceTree = "<group>"; };
 		DB46FDD61F43A0ED004C4CCC /* TiAisle411MapViewProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiAisle411MapViewProxy.m; path = Classes/TiAisle411MapViewProxy.m; sourceTree = "<group>"; };
 		DB46FDDA1F43A0FD004C4CCC /* TiAisle411MapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiAisle411MapView.h; path = Classes/TiAisle411MapView.h; sourceTree = "<group>"; };
@@ -127,6 +128,7 @@
 				24DE9E1011C5FE74003F90F6 /* TiAisle411ModuleAssets.m */,
 				24DD6CF71134B3F500162E58 /* TiAisle411Module.h */,
 				24DD6CF81134B3F500162E58 /* TiAisle411Module.m */,
+				DB17C6451F4F386A001BB60E /* TiAisle411Constants.h */,
 			);
 			name = Module;
 			sourceTree = "<group>";

@@ -13,6 +13,4 @@
 
 - (void)requestCachedRasterMap:(id)args;
 
-- (void)search:(id)args;
-
 @end

@@ -51,6 +51,7 @@ Create a new map-view with `Aisle411.createMapView()`.
 - [x] `logoPosition`
 - [x] `compassEnabled`
 - [x] `zoomButtonsHidden`
+- [x] `zoomEnabled`
 
 #### Methods
 
@@ -58,7 +59,6 @@ Create a new map-view with `Aisle411.createMapView()`.
 - [x] `zoomIn()`
 - [x] `zoomOut()`
 - [x] `addOverlay()`
-  - `products` (Array<Object<name, id>>)
 - [x] `redraw()`
 - [x] `redrawOverlay()`
 - [x] `fadeIn(args)`
@@ -68,7 +68,11 @@ Create a new map-view with `Aisle411.createMapView()`.
 
 #### Events
 - [x] `load`
-- [x] `overlayitemclick`
+- [x] `informationBarItemClick`
+- [x] `didItemSelected`
+- [x] `didItemReselected`
+- [x] `didItemDeselected`
+- [x] `shouldZ`
 
 ## Author
 Hans Knöchel

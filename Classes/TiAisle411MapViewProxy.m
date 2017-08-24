@@ -9,30 +9,24 @@
 #import "TiUtils.h"
 #import "TiAisle411MapView.h"
 
-#import <MapSDK/FMProduct.h>
-#import <MapSDK/ProductCalloutOverlay.h>
+#import <MapSDK/MapSDK.h>
+#import <AisleNetworking/AisleNetworking-Swift.h>
 
 @implementation TiAisle411MapViewProxy
 
 - (NSArray *)keySequence
 {
-  return @[@"url"];
-}
-
-- (id)_initWithPageContext:(id<TiEvaluator>)context
-{
-  if (self = [super _initWithPageContext:context]) {
-    _productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
-    _productCallOutOverlay.informationBar.delegate = self;
-    _productCallOutOverlay.informationBar.dataSource = self;
-  }
-  
-  return self;
+  return @[@"mapMode"];
 }
 
 - (TiAisle411MapView *)mapView
 {
   return (TiAisle411MapView *)[self view];
+}
+
+- (ProductCalloutOverlay *)overlay
+{
+  return [[self mapView] overlay];
 }
 
 #pragma mark Public API's
@@ -67,6 +61,12 @@
   [[[self mapView] mapController] setMapBackgroundColor:[TiUtils colorValue:backgroundColor].color];
 }
 
+- (void)setMapMode:(id)mapMode
+{
+  ENSURE_TYPE(mapMode, NSNumber);
+  [[self mapView] setMapMode:[TiUtils intValue:mapMode def:TiAisle411SearchTypeShoppingList]];
+}
+
 - (void)deselectAll:(id)unused
 {
   [[[self mapView] mapController] deselectAll];
@@ -92,17 +92,13 @@
   [[[self mapView] mapController] redraw];
 }
 
-- (void)redrawOverlay:(id)unused
+- (void)redrawOverlay:(id)args
 {
-  [[[self mapView] mapController] redrawOverlay:_productCallOutOverlay];
-}
-
-- (void)addOverlay:(id)args
-{
-  ENSURE_SINGLE_ARG(args, NSDictionary);
-  
-  NSMutableArray<FMProduct *> *nativeProducts = [NSMutableArray array];
+  ENSURE_SINGLE_ARG_OR_NIL(args, NSDictionary);
+    
+  NSArray *venueItems = [args objectForKey:@"venueItems"];
   NSArray *inputProducts = [args objectForKey:@"products"];
+  NSMutableArray<FMProduct *> *sdkProducts = [NSMutableArray array];
   
   if (!inputProducts) {
     NSLog(@"[ERROR] Missing required parameter 'products!'");
@@ -111,17 +107,42 @@
   
   _products = inputProducts;
   
+  assert(venueItems.count == _products.count);
+  
   for (NSDictionary *inputProduct in _products) {
     FMProduct *product = [[FMProduct alloc] init];
+    NSDictionary *venueItem = [venueItems objectAtIndex:[_products indexOfObject:inputProduct]];
+    
     product.name = [inputProduct objectForKey:@"name"];
     product.idn = [TiUtils intValue:[inputProduct objectForKey:@"id"]];
+    product.checked = [TiUtils boolValue:[inputProduct objectForKey:@"isPickedUp"] def:NO];
     
-    [nativeProducts addObject:product];
+    NSArray *sections = (NSArray *)[venueItem objectForKey:@"sections"];
+    NSMutableArray<FMSection *> *productSectionArray = [NSMutableArray arrayWithCapacity:[sections count]];
+
+    for (NSDictionary *section in sections) {
+      FMSection *newSection = [[FMSection alloc] init];
+      newSection.maplocation = [(NSNumber *)[section valueForKey:@"mapPointId"] integerValue];
+      
+      if (newSection.maplocation == 0) {
+        continue;
+      }
+      
+      newSection.aisleTitle = [section valueForKey:@"aisle"];
+      newSection.title = [section valueForKey:@"section"];
+      
+      [productSectionArray addObject:newSection];
+    }
+    
+    product.sections = productSectionArray;
+    [sdkProducts addObject:product];
   }
   
-  _productCallOutOverlay.products = nativeProducts;
+  [[self overlay] setProducts:sdkProducts];
   
-  [[[self mapView] mapController] addOverlay:_productCallOutOverlay];
+  TiThreadPerformOnMainThread(^{
+    [[[self mapView] mapController] redrawOverlay:[self overlay]];
+  }, NO);
 }
 
 - (void)reloadTiles:(id)unused
@@ -140,91 +161,113 @@
                                 relativeToScreen:relativeToScreen.boolValue];
 }
 
-#pragma mark Information Bar Data Source / Delegate
 
-- (void)informationBar:(InformationBar *)informationBar didSelectRowAtIndex:(NSInteger)rowIndex forItem:(OverlayItem *)item
+- (void)search:(id)args
 {
-  if ([self _hasListeners:@"overlayitemclick"]) {
-    [self fireEvent:@"overlayitemclick" withObject:@{@"title": item.title}]; // Return more if desired
-  }
-}
-
-- (NSInteger)informationBar:(InformationBar*)informationBar numberOfRowsForItem:(OverlayItem*)item
-{
-  return [[(ProductOverlayItem *)item products] count];
-}
-
-- (UITableViewCell *)informationBar:(InformationBar*)informationBar cellForRowAtIndex:(NSInteger) rowIndex forItem:(OverlayItem*)item
-{
-  UITableViewCell *cell = [informationBar dequeueReusableCellWithIdentifier:@"Cell"];
+  ENSURE_SINGLE_ARG(args, NSDictionary);
   
-  if (cell == nil) {
-    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
-  }
-  
-  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
-  FMProduct *product = [productItem.products objectAtIndex:rowIndex];
-  NSDictionary *proxyProduct = [_products objectAtIndex:rowIndex];
-  
-  NSMutableAttributedString *attributedString = nil;
-  
-  // Strike through or not
-  if ([proxyProduct valueForKey:@"isPickedUp"]) {
-    attributedString = [[NSMutableAttributedString alloc] initWithString:product.name];
-    [attributedString addAttribute:NSStrikethroughStyleAttributeName value:@2 range:NSMakeRange(0, attributedString.length)];
+  if ([[self mapView] mapMode] == TiAisle411SearchTypeShoppingList) {
+    [self _searchInShoppingList:args];
+  } else if ([[self mapView] mapMode] == TiAisle411SearchTypeFulltextSearch) {
+    [self _searchWithFulltext:args];
   } else {
-    attributedString = [[NSMutableAttributedString alloc] initWithString:product.name];
+    NSLog(@"[ERROR] Unknown type provided. Please pass either SEARCH_TYPE_FULLTEXT or SEARCH_TYPE_SHOPPING_LIST");
+  }
+}
+
+#pragma mark Utilities
+
+- (void)_searchInShoppingList:(NSDictionary *)args
+{
+  
+  NSNumber *venueId = [args objectForKey:@"venueId"];
+  NSString *name = [args objectForKey:@"name"];
+  NSArray *products = [args objectForKey:@"products"]; // { name: '', id: '', section: '', ... }
+  KrollCallback *callback = [args objectForKey:@"callback"];
+  
+  AisleServer *server = [AisleServer shared];
+  
+  NSMutableArray *items = [NSMutableArray arrayWithCapacity:products.count];
+  
+  for (NSDictionary *item in products) {
+    [items addObject:@{@"name": [item valueForKey:@"sectionCode"] ?: @""}];
   }
   
-  cell.textLabel.attributedText = attributedString;
-  cell.selectionStyle = UITableViewCellSelectionStyleNone;
+  [server searchWithVenueWithId:venueId.integerValue
+         forItemsFromDictionary:@{@"name": name, @"items": items}
+              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
+                if (errors.count > 0 ) {
+                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                  return;
+                }
+                
+                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
+                
+                for (IVKVenueItem *venueItem in venueItems) {
+                  [dictVenueItems addObject:[self dictionaryFromVenueItem:venueItem]];
+                }
+                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
+              }];
+}
+
+- (void)_searchWithFulltext:(NSDictionary *)args
+{
   
-  return cell;
-}
-
-- (NSString *)informationBar:(InformationBar*)informationBar keywordForItem:(OverlayItem*)item
-{
-  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
-  FMProduct *firstProduct = [[productItem products] firstObject];
+  NSNumber *venueId = [args objectForKey:@"venueId"];
+  NSString *searchTerm = [args objectForKey:@"searchTerm"];
+  NSNumber *startingIndex = [args objectForKey:@"startingIndex"];
+  NSNumber *endingIndex = [args objectForKey:@"endingIndex"];
+  NSNumber *maxCount = [args objectForKey:@"maxCount"];
+  KrollCallback *callback = [args objectForKey:@"callback"];
   
-  return [firstProduct name] ?: @"";
-}
-
-
-- (BOOL)informationBar:(InformationBar*)informationBar fixedForItem:(OverlayItem*)item
-{
-  [item setDisabled:YES]; // Disable items
-  return YES;
- 
-}
-
-- (NSString*)informationBar:(InformationBar*)informationBar collapsedInstructionsForItem:(OverlayItem*)item
-{
-  return @"";
-}
-
-- (NSString*)informationBar:(InformationBar*)informationBar expandedInstructionsForItem:(OverlayItem*)item
-{
-  return @"";
-}
-
-- (NSString*)informationBar:(InformationBar*)informationBar locationForItem:(OverlayItem*)item
-{
-  ProductOverlayItem *productItem = (ProductOverlayItem *)item;
-  FMProduct *product = productItem.products.firstObject;
-  FMSection *sectionForOverlay = [[FMSection alloc] init];
+  AisleServer *server = [AisleServer shared];
   
-  for (FMSection *section in product.sections) {
-    if (section.maplocation == item.maplocation) {
-      sectionForOverlay = section;
-    }
+  [server searchWithVenueWithId:venueId.integerValue
+                        forTerm:searchTerm
+              withStartingIndex:startingIndex.integerValue
+                 andEndingIndex:endingIndex.integerValue
+                   withMaxCount:maxCount.integerValue
+              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
+                if (errors.count > 0 ) {
+                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                  return;
+                }
+                
+                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
+                
+                for (IVKVenueItem *venueItem in venueItems) {
+                  [dictVenueItems addObject:[self dictionaryFromVenueItem:venueItem]];
+                }
+                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
+              }];
+}
+
+- (NSDictionary *)dictionaryFromVenueItem:(IVKVenueItem *)venueItem
+{
+  return @{
+    @"id": NUMINTEGER(venueItem.id),
+    @"name": venueItem.name,
+    @"price": NUMDOUBLE(venueItem.price),
+    @"discountedPrice": NUMDOUBLE(venueItem.discountedPrice),
+    @"section": venueItem.sectionName,
+    @"sections": [self arrayFromSections:venueItem.sections],
+    @"venueItemTypeName": venueItem.venueItemTypeName
+  };
+}
+
+- (NSArray *)arrayFromSections:(NSArray<IVKSection *> *)sections
+{
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:sections.count];
+  
+  for (IVKSection *section in sections) {
+    [result addObject:@{
+      @"aisle": section.aisle,
+      @"mapPointId": NUMINTEGER(section.mapPointId),
+      @"section": section.section
+    }];
   }
   
-  if (sectionForOverlay == nil) {
-    NSLog(@"[ERROR] Logic-error: sectionForOverlay should be non-nil at this point!");
-  }
-  
-  return sectionForOverlay.aisleTitle;
+  return result;
 }
 
 #pragma mark Layout Helper
