@@ -64,6 +64,22 @@
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
   
+  TiAisle411SearchType type = [TiUtils intValue:[args objectForKey:@"type"] def:TiAisle411SearchTypeFulltextSearch];
+  
+  if (type == TiAisle411SearchTypeFulltextSearch) {
+    [self _searchWithFulltext:args];
+  } else if (TiAisle411SearchTypeShoppingList) {
+    [self _searchInShoppingList:args];
+  } else {
+    NSLog(@"[ERROR] Unknown type provided. Please pass either SEARCH_TYPE_FULLTEXT or SEARCH_TYPE_SHOPPING_LIST");
+  }
+}
+
+#pragma mark Utilities
+
+- (void)_searchInShoppingList:(NSDictionary *)args
+{
+  
   NSNumber *venueId = [args objectForKey:@"venueId"];
   NSString *name = [args objectForKey:@"name"];
   NSArray *products = [args objectForKey:@"products"]; // { name: '', id: '', section: '', ... }
@@ -85,21 +101,58 @@
                   return;
                 }
                 
-                NSMutableArray *dictVenues = [NSMutableArray arrayWithCapacity:venueItems.count];
+                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
                 
                 for (IVKVenueItem *venueItem in venueItems) {
-                  [dictVenues addObject:@{
-                    @"id": NUMINTEGER(venueItem.id),
-                    @"name": venueItem.name,
-                    @"price": NUMDOUBLE(venueItem.price),
-                    @"discountedPrice": NUMDOUBLE(venueItem.discountedPrice),
-                    @"section": venueItem.sectionName,
-                    @"sections": [TiAisle411Module arrayFromSections:venueItem.sections],
-                    @"venueItemTypeName": venueItem.venueItemTypeName, // More to be exposed here
-                  }];
+                  [dictVenueItems addObject:[TiAisle411Module dicationaryFromVenueItem:venueItem]];
                 }
-                [callback call:@[@{@"venueItems": dictVenues}] thisObject:self];
+                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
               }];
+}
+
+- (void)_searchWithFulltext:(NSDictionary *)args
+{
+  
+  NSNumber *venueId = [args objectForKey:@"venueId"];
+  NSString *searchTerm = [args objectForKey:@"searchTerm"];
+  NSNumber *startingIndex = [args objectForKey:@"startingIndex"];
+  NSNumber *endingIndex = [args objectForKey:@"endingIndex"];
+  NSNumber *maxCount = [args objectForKey:@"maxCount"];
+  KrollCallback *callback = [args objectForKey:@"callback"];
+ 
+  AisleServer *server = [AisleServer shared];
+  
+  [server searchWithVenueWithId:venueId.integerValue
+                        forTerm:searchTerm
+              withStartingIndex:startingIndex.integerValue
+                 andEndingIndex:endingIndex.integerValue
+                   withMaxCount:maxCount.integerValue
+              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
+                if (errors.count > 0 ) {
+                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                  return;
+                }
+                
+                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
+                
+                for (IVKVenueItem *venueItem in venueItems) {
+                  [dictVenueItems addObject:[TiAisle411Module dicationaryFromVenueItem:venueItem]];
+                }
+                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
+              }];
+}
+
++ (NSDictionary *)dicationaryFromVenueItem:(IVKVenueItem *)venueItem
+{
+  return @{
+    @"id": NUMINTEGER(venueItem.id),
+    @"name": venueItem.name,
+    @"price": NUMDOUBLE(venueItem.price),
+    @"discountedPrice": NUMDOUBLE(venueItem.discountedPrice),
+    @"section": venueItem.sectionName,
+    @"sections": [TiAisle411Module arrayFromSections:venueItem.sections],
+    @"venueItemTypeName": venueItem.venueItemTypeName
+  };
 }
 
 + (NSArray *)arrayFromSections:(NSArray<IVKSection *> *)sections
@@ -121,5 +174,8 @@
 
 MAKE_SYSTEM_PROP(AISLE_LOGO_POSITION_RIGHT_BOTTOM, AisleLogoRightBottomPosition);
 MAKE_SYSTEM_PROP(AISLE_LOGO_POSITION_LEFT_BOTTOM, AisleLogoLeftBottomPosition);
+
+MAKE_SYSTEM_PROP(SEARCH_TYPE_FULLTEXT, TiAisle411SearchTypeFulltextSearch);
+MAKE_SYSTEM_PROP(SEARCH_TYPE_SHOPPING_LIST, TiAisle411SearchTypeShoppingList);
 
 @end

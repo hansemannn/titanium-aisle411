@@ -141,19 +141,20 @@
 
 - (BOOL)informationBar:(InformationBar*)informationBar fixedForItem:(OverlayItem*)item
 {
-  [item setDisabled:YES]; // Disable items
-  return YES;
-  
+//  [item setDisabled:YES]; // Disable items
+//  return NO;
+
+  return NO;
 }
 
 - (NSString*)informationBar:(InformationBar*)informationBar collapsedInstructionsForItem:(OverlayItem*)item
 {
-  return @"";
+  return @"Slide up for items in this section";
 }
 
 - (NSString*)informationBar:(InformationBar*)informationBar expandedInstructionsForItem:(OverlayItem*)item
 {
-  return @"";
+  return @"Slide down to close";
 }
 
 - (NSString*)informationBar:(InformationBar*)informationBar locationForItem:(OverlayItem*)item
@@ -181,22 +182,10 @@
 {
   UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
   [item setImage:selected];
+  [_mapController setPosition:item animated:YES];
   
   if ([[self proxy] _hasListeners:@"didItemSelected"]) {
     [[self proxy] fireEvent:@"didItemSelected" withObject:@{@"item": item.title}];
-  }
-}
-
-- (void)calloutOverlay:(CalloutOverlay*)overlay didItemReselected:(OverlayItem*)oldItem withItem:(OverlayItem*)item
-{
-  UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
-  UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
-
-  [oldItem setImage:unselected];
-  [item setImage:selected];
-
-  if ([[self proxy] _hasListeners:@"didItemReselected"]) {
-    [[self proxy] fireEvent:@"didItemReselected" withObject:@{@"item": item.title}];
   }
 }
 
@@ -210,9 +199,18 @@
   }
 }
 
-- (BOOL)calloutOverlay:(CalloutOverlay*)overlay shouldZoom:(OverlayItem*)item
+- (void)calloutOverlay:(CalloutOverlay*)overlay didItemReselected:(OverlayItem*)oldItem withItem:(OverlayItem*)item
 {
-  return NO;
+  UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
+  UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
+  
+  [oldItem setImage:unselected];
+  [item setImage:selected];
+  [_mapController setPosition:item animated:YES];
+  
+  if ([[self proxy] _hasListeners:@"didItemReselected"]) {
+    [[self proxy] fireEvent:@"didItemReselected" withObject:@{@"item": item.title}];
+  }
 }
 
 #pragma mark Layout Helper
