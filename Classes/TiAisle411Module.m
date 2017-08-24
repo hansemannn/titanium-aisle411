@@ -6,6 +6,7 @@
  */
 
 #import "TiAisle411Module.h"
+#import "TiAisle411Constants.h"
 #import "TiBase.h"
 #import "TiHost.h"
 #import "TiUtils.h"
@@ -58,116 +59,6 @@
 
                            [callback call:@[@{@"url": NULL_IF_NIL(url.absoluteString), @"path": NULL_IF_NIL(url.path)}] thisObject:self];
                          }];
-}
-
-- (void)search:(id)args
-{
-  ENSURE_SINGLE_ARG(args, NSDictionary);
-  
-  TiAisle411SearchType type = [TiUtils intValue:[args objectForKey:@"type"] def:TiAisle411SearchTypeFulltextSearch];
-  
-  if (type == TiAisle411SearchTypeFulltextSearch) {
-    [self _searchWithFulltext:args];
-  } else if (TiAisle411SearchTypeShoppingList) {
-    [self _searchInShoppingList:args];
-  } else {
-    NSLog(@"[ERROR] Unknown type provided. Please pass either SEARCH_TYPE_FULLTEXT or SEARCH_TYPE_SHOPPING_LIST");
-  }
-}
-
-#pragma mark Utilities
-
-- (void)_searchInShoppingList:(NSDictionary *)args
-{
-  
-  NSNumber *venueId = [args objectForKey:@"venueId"];
-  NSString *name = [args objectForKey:@"name"];
-  NSArray *products = [args objectForKey:@"products"]; // { name: '', id: '', section: '', ... }
-  KrollCallback *callback = [args objectForKey:@"callback"];
-  
-  AisleServer *server = [AisleServer shared];
-  
-  NSMutableArray *items = [NSMutableArray arrayWithCapacity:products.count];
-  
-  for (NSDictionary *item in products) {
-    [items addObject:@{@"name": [item valueForKey:@"sectionCode"] ?: @""}];
-  }
-  
-  [server searchWithVenueWithId:venueId.integerValue
-         forItemsFromDictionary:@{@"name": name, @"items": items}
-              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
-                if (errors.count > 0 ) {
-                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
-                  return;
-                }
-                
-                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
-                
-                for (IVKVenueItem *venueItem in venueItems) {
-                  [dictVenueItems addObject:[TiAisle411Module dicationaryFromVenueItem:venueItem]];
-                }
-                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
-              }];
-}
-
-- (void)_searchWithFulltext:(NSDictionary *)args
-{
-  
-  NSNumber *venueId = [args objectForKey:@"venueId"];
-  NSString *searchTerm = [args objectForKey:@"searchTerm"];
-  NSNumber *startingIndex = [args objectForKey:@"startingIndex"];
-  NSNumber *endingIndex = [args objectForKey:@"endingIndex"];
-  NSNumber *maxCount = [args objectForKey:@"maxCount"];
-  KrollCallback *callback = [args objectForKey:@"callback"];
- 
-  AisleServer *server = [AisleServer shared];
-  
-  [server searchWithVenueWithId:venueId.integerValue
-                        forTerm:searchTerm
-              withStartingIndex:startingIndex.integerValue
-                 andEndingIndex:endingIndex.integerValue
-                   withMaxCount:maxCount.integerValue
-              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
-                if (errors.count > 0 ) {
-                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
-                  return;
-                }
-                
-                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
-                
-                for (IVKVenueItem *venueItem in venueItems) {
-                  [dictVenueItems addObject:[TiAisle411Module dicationaryFromVenueItem:venueItem]];
-                }
-                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
-              }];
-}
-
-+ (NSDictionary *)dicationaryFromVenueItem:(IVKVenueItem *)venueItem
-{
-  return @{
-    @"id": NUMINTEGER(venueItem.id),
-    @"name": venueItem.name,
-    @"price": NUMDOUBLE(venueItem.price),
-    @"discountedPrice": NUMDOUBLE(venueItem.discountedPrice),
-    @"section": venueItem.sectionName,
-    @"sections": [TiAisle411Module arrayFromSections:venueItem.sections],
-    @"venueItemTypeName": venueItem.venueItemTypeName
-  };
-}
-
-+ (NSArray *)arrayFromSections:(NSArray<IVKSection *> *)sections
-{
-  NSMutableArray *result = [NSMutableArray arrayWithCapacity:sections.count];
-  
-  for (IVKSection *section in sections) {
-    [result addObject:@{
-      @"aisle": section.aisle,
-      @"mapPointId": NUMINTEGER(section.mapPointId),
-      @"section": section.section,
-    }];
-  }
-  
-  return result;
 }
 
 #pragma mark Constants

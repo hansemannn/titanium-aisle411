@@ -10,8 +10,14 @@
 #import "TiAisle411MapView.h"
 
 #import <MapSDK/MapSDK.h>
+#import <AisleNetworking/AisleNetworking-Swift.h>
 
 @implementation TiAisle411MapViewProxy
+
+- (NSArray *)keySequence
+{
+  return @[@"mapMode"];
+}
 
 - (TiAisle411MapView *)mapView
 {
@@ -53,6 +59,12 @@
 {
   ENSURE_TYPE(backgroundColor, NSString);
   [[[self mapView] mapController] setMapBackgroundColor:[TiUtils colorValue:backgroundColor].color];
+}
+
+- (void)setMapMode:(id)mapMode
+{
+  ENSURE_TYPE(mapMode, NSNumber);
+  [[self mapView] setMapMode:[TiUtils intValue:mapMode def:TiAisle411SearchTypeShoppingList]];
 }
 
 - (void)deselectAll:(id)unused
@@ -147,6 +159,115 @@
   
   [[[self mapView] mapController] fadeInWithZoom:zoom.floatValue
                                 relativeToScreen:relativeToScreen.boolValue];
+}
+
+
+- (void)search:(id)args
+{
+  ENSURE_SINGLE_ARG(args, NSDictionary);
+  
+  if ([[self mapView] mapMode] == TiAisle411SearchTypeShoppingList) {
+    [self _searchInShoppingList:args];
+  } else if ([[self mapView] mapMode] == TiAisle411SearchTypeFulltextSearch) {
+    [self _searchWithFulltext:args];
+  } else {
+    NSLog(@"[ERROR] Unknown type provided. Please pass either SEARCH_TYPE_FULLTEXT or SEARCH_TYPE_SHOPPING_LIST");
+  }
+}
+
+#pragma mark Utilities
+
+- (void)_searchInShoppingList:(NSDictionary *)args
+{
+  
+  NSNumber *venueId = [args objectForKey:@"venueId"];
+  NSString *name = [args objectForKey:@"name"];
+  NSArray *products = [args objectForKey:@"products"]; // { name: '', id: '', section: '', ... }
+  KrollCallback *callback = [args objectForKey:@"callback"];
+  
+  AisleServer *server = [AisleServer shared];
+  
+  NSMutableArray *items = [NSMutableArray arrayWithCapacity:products.count];
+  
+  for (NSDictionary *item in products) {
+    [items addObject:@{@"name": [item valueForKey:@"sectionCode"] ?: @""}];
+  }
+  
+  [server searchWithVenueWithId:venueId.integerValue
+         forItemsFromDictionary:@{@"name": name, @"items": items}
+              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
+                if (errors.count > 0 ) {
+                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                  return;
+                }
+                
+                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
+                
+                for (IVKVenueItem *venueItem in venueItems) {
+                  [dictVenueItems addObject:[self dictionaryFromVenueItem:venueItem]];
+                }
+                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
+              }];
+}
+
+- (void)_searchWithFulltext:(NSDictionary *)args
+{
+  
+  NSNumber *venueId = [args objectForKey:@"venueId"];
+  NSString *searchTerm = [args objectForKey:@"searchTerm"];
+  NSNumber *startingIndex = [args objectForKey:@"startingIndex"];
+  NSNumber *endingIndex = [args objectForKey:@"endingIndex"];
+  NSNumber *maxCount = [args objectForKey:@"maxCount"];
+  KrollCallback *callback = [args objectForKey:@"callback"];
+  
+  AisleServer *server = [AisleServer shared];
+  
+  [server searchWithVenueWithId:venueId.integerValue
+                        forTerm:searchTerm
+              withStartingIndex:startingIndex.integerValue
+                 andEndingIndex:endingIndex.integerValue
+                   withMaxCount:maxCount.integerValue
+              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
+                if (errors.count > 0 ) {
+                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                  return;
+                }
+                
+                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
+                
+                for (IVKVenueItem *venueItem in venueItems) {
+                  [dictVenueItems addObject:[self dictionaryFromVenueItem:venueItem]];
+                }
+                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
+              }];
+}
+
+- (NSDictionary *)dictionaryFromVenueItem:(IVKVenueItem *)venueItem
+{
+  return @{
+    @"id": NUMINTEGER(venueItem.id),
+    @"name": venueItem.name,
+    @"price": NUMDOUBLE(venueItem.price),
+    @"discountedPrice": NUMDOUBLE(venueItem.discountedPrice),
+    @"section": venueItem.sectionName,
+    @"sections": [self arrayFromSections:venueItem.sections],
+    @"venueItemTypeName": venueItem.venueItemTypeName
+  };
+}
+
+- (NSArray *)arrayFromSections:(NSArray<IVKSection *> *)sections
+{
+  NSMutableArray *result = [NSMutableArray arrayWithCapacity:sections.count];
+  
+  for (IVKSection *section in sections) {
+    [result addObject:@{
+      @"aisle": section.aisle,
+      @"mapPointId": NUMINTEGER(section.mapPointId),
+      @"section": section.section
+    }];
+  }
+  
+  return result;
 }
 
 #pragma mark Layout Helper

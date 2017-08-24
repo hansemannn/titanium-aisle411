@@ -20,6 +20,8 @@
     UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
     UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
     
+    _mapMode = [TiUtils intValue:[[self proxy] valueForKey:@"mapMode"] def:TiAisle411SearchTypeShoppingList];
+
     // Create callout-overlay
     _productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
     _productCallOutOverlay.delegate = self;
