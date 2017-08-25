@@ -32,10 +32,10 @@
   [[[self mapView] mapController] setFloor:[TiUtils intValue:floor]];
 }
 
-- (void)setZoomButtonsHidden:(id)floor
+- (void)setZoomButtonsHidden:(id)zoomButtonsHidden
 {
-  ENSURE_TYPE(floor, NSNumber);
-  [[[self mapView] mapController] setZoomButtonsHidden:[TiUtils boolValue:floor]];
+  ENSURE_TYPE(zoomButtonsHidden, NSNumber);
+  [[[self mapView] mapController] setZoomButtonsHidden:[TiUtils boolValue:zoomButtonsHidden]];
 }
 
 - (void)setLogoPosition:(id)logoPosition
@@ -56,10 +56,18 @@
   [[[self mapView] mapController] setMapBackgroundColor:[TiUtils colorValue:backgroundColor].color];
 }
 
-- (void)setShoppingModeEnabled:(id)shoppingModeEnabled
+- (void)setKeyWordLabelText:(id)keyWordLabelText
 {
-  ENSURE_TYPE(shoppingModeEnabled, NSNumber);
-  [[self mapView] setShoppingModeEnabled:[TiUtils boolValue:shoppingModeEnabled def:YES]];
+  ENSURE_TYPE(keyWordLabelText, NSString);
+
+  NSArray *overlays = [[[self mapView] mapController] overlays];
+
+  if (overlays == nil || [overlays count] != 1) {
+    NSLog(@"[ERROR] No overlay added or too many overlays existing. Skipping ...");
+    return;
+  }
+
+  [[(ProductCalloutOverlay *)[overlays objectAtIndex:0] informationBar] setKeyWordLabelText:keyWordLabelText];
 }
 
 - (void)deselectAll:(id)unused
