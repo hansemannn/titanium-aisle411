@@ -19,7 +19,7 @@
     UIImage *selected = [TiUtils toImage:[[self proxy] valueForKey:@"selectedPinImage"] proxy:self.proxy];
     UIImage *unselected = [TiUtils toImage:[[self proxy] valueForKey:@"unselectedPinImage"] proxy:self.proxy];
 
-    _shoppingModeEnabled = [TiUtils boolValue:[[self proxy] valueForKey:@"shoppingModeEnabled"] def:NO];
+    _shoppingModeEnabled = [TiUtils boolValue:[[self proxy] valueForKey:@"shoppingListEnabled"] def:NO];
 
     // Create callout-overlay
     _productCallOutOverlay = [[ProductCalloutOverlay alloc] initWithInformationBarSupport];
@@ -296,7 +296,12 @@
 
 - (UIViewContentMode)contentModeForMapView
 {
-  if (TiDimensionIsAuto(width) || TiDimensionIsAutoSize(width) || TiDimensionIsUndefined(width) || TiDimensionIsAuto(height) || TiDimensionIsAutoSize(height) || TiDimensionIsUndefined(height)) {
+  if (TiDimensionIsAuto(_width)
+      || TiDimensionIsAutoSize(_width)
+      || TiDimensionIsUndefined(_width)
+      || TiDimensionIsAuto(_height)
+      || TiDimensionIsAutoSize(_height)
+      || TiDimensionIsUndefined(_height)) {
     return UIViewContentModeScaleAspectFit;
   } else {
     return UIViewContentModeScaleToFill;
@@ -314,15 +319,15 @@
 
 - (CGFloat)contentWidthForWidth:(CGFloat)suggestedWidth
 {
-  if (autoWidth > 0) {
+  if (_autoWidth > 0) {
     //If height is DIP returned a scaled autowidth to maintain aspect ratio
-    if (TiDimensionIsDip(height) && autoHeight > 0) {
-      return roundf(autoWidth * height.value / autoHeight);
+    if (TiDimensionIsDip(_height) && _autoHeight > 0) {
+      return roundf(_autoWidth * _height.value / _autoHeight);
     }
-    return autoWidth;
+    return _autoWidth;
   }
   
-  CGFloat calculatedWidth = TiDimensionCalculateValue(width, autoWidth);
+  CGFloat calculatedWidth = TiDimensionCalculateValue(_width, _autoWidth);
   if (calculatedWidth > 0) {
     return calculatedWidth;
   }
@@ -332,15 +337,15 @@
 
 - (CGFloat)contentHeightForWidth:(CGFloat)width_
 {
-  if (width_ != autoWidth && autoWidth > 0 && autoHeight > 0) {
-    return (width_ * autoHeight / autoWidth);
+  if (width_ != _autoWidth && _autoWidth > 0 && _autoHeight > 0) {
+    return (width_ * _autoHeight / _autoWidth);
   }
   
-  if (autoHeight > 0) {
-    return autoHeight;
+  if (_autoHeight > 0) {
+    return _autoHeight;
   }
   
-  CGFloat calculatedHeight = TiDimensionCalculateValue(height, autoHeight);
+  CGFloat calculatedHeight = TiDimensionCalculateValue(_height, _autoHeight);
   if (calculatedHeight > 0) {
     return calculatedHeight;
   }
@@ -350,7 +355,12 @@
 
 - (UIViewContentMode)contentMode
 {
-  if (TiDimensionIsAuto(width) || TiDimensionIsAutoSize(width) || TiDimensionIsUndefined(width) || TiDimensionIsAuto(height) || TiDimensionIsAutoSize(height) || TiDimensionIsUndefined(height)) {
+  if (TiDimensionIsAuto(_width)
+      || TiDimensionIsAutoSize(_width)
+      || TiDimensionIsUndefined(_width)
+      || TiDimensionIsAuto(_height)
+      || TiDimensionIsAutoSize(_height)
+      || TiDimensionIsUndefined(_height)) {
     return UIViewContentModeScaleAspectFit;
   } else {
     return UIViewContentModeScaleToFill;

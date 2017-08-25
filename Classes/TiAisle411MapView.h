@@ -9,10 +9,10 @@
 
 @interface TiAisle411MapView : TiUIView <MapControllerDelegate, InformationBarDelegate, InformationBarDataSource, CalloutOverlayDelegate> {
 @private
-  TiDimension width;
-  TiDimension height;
-  CGFloat autoHeight;
-  CGFloat autoWidth;
+  TiDimension _width;
+  TiDimension _height;
+  CGFloat _autoHeight;
+  CGFloat _autoWidth;
 
   ProductCalloutOverlay *_productCallOutOverlay;
   NSString *_keywordText;

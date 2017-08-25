@@ -156,12 +156,11 @@
                                 relativeToScreen:relativeToScreen.boolValue];
 }
 
-
 - (void)search:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
   
-  if ([TiUtils boolValue:[self valueForKey:@"shoppingModeEnabled"] def:NO]) {
+  if ([[self mapView] shoppingModeEnabled]) {
     [self _searchInShoppingList:args];
   } else {
     [self _searchWithFulltext:args];

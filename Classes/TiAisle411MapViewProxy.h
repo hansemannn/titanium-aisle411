@@ -33,4 +33,6 @@
 
 - (void)fadeIn:(id)args;
 
+- (void)search:(id)args;
+
 @end
