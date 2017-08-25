@@ -10,8 +10,8 @@
 #import "TiHost.h"
 #import "TiUtils.h"
 
-#import <MapSDK/MapSDK.h>
 #import <AisleNetworking/AisleNetworking-Swift.h>
+#import <MapSDK/MapSDK.h>
 
 @implementation TiAisle411Module
 
@@ -20,23 +20,23 @@
 // This is generated for your module, please do not change it
 - (id)moduleGUID
 {
-	return @"2bd872ef-d80a-4d07-be50-cbd424b67eb4";
+  return @"2bd872ef-d80a-4d07-be50-cbd424b67eb4";
 }
 
 // This is generated for your module, please do not change it
 - (NSString *)moduleId
 {
-	return @"ti.aisle411";
+  return @"ti.aisle411";
 }
 
 #pragma mark Lifecycle
 
 - (void)startup
 {
-	// This method is called when the module is first loaded
-	// You *must* call the superclass
-	[super startup];
-	NSLog(@"[DEBUG] %@ loaded",self);
+  // This method is called when the module is first loaded
+  // You *must* call the superclass
+  [super startup];
+  NSLog(@"[DEBUG] %@ loaded", self);
 }
 
 #pragma mark Public APIs
@@ -44,19 +44,21 @@
 - (void)requestCachedRasterMap:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
-  
+
   NSNumber *venueId = [args objectForKey:@"venueId"];
   KrollCallback *callback = [args objectForKey:@"callback"];
-  
+
   AisleServer *server = [AisleServer shared];
   [server requestCachedRasterMapForVenueId:[venueId integerValue]
                          withResponseBlock:^(NSURL *url, NSArray<IVKError *> *errors) {
                            if (errors.count > 0) {
-                             [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                             [callback call:@[ @{ @"error" : [[errors objectAtIndex:0] description] } ] thisObject:self];
                              return;
                            }
 
-                           [callback call:@[@{@"url": NULL_IF_NIL(url.absoluteString), @"path": NULL_IF_NIL(url.path)}] thisObject:self];
+                           [callback call:@[ @{ @"url" : NULL_IF_NIL(url.absoluteString),
+                             @"path" : NULL_IF_NIL(url.path) } ]
+                               thisObject:self];
                          }];
 }
 

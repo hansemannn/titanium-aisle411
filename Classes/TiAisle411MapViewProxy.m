@@ -6,11 +6,11 @@
  */
 
 #import "TiAisle411MapViewProxy.h"
-#import "TiUtils.h"
 #import "TiAisle411MapView.h"
+#import "TiUtils.h"
 
-#import <MapSDK/MapSDK.h>
 #import <AisleNetworking/AisleNetworking-Swift.h>
+#import <MapSDK/MapSDK.h>
 
 @implementation TiAisle411MapViewProxy
 
@@ -90,54 +90,55 @@
 - (void)redrawOverlay:(id)args
 {
   ENSURE_SINGLE_ARG_OR_NIL(args, NSDictionary);
-    
+
   NSArray *venueItems = [args objectForKey:@"venueItems"];
   NSArray *inputProducts = [args objectForKey:@"products"];
   NSMutableArray<FMProduct *> *sdkProducts = [NSMutableArray array];
-  
+
   if (!inputProducts) {
     NSLog(@"[ERROR] Missing required parameter 'products!'");
     return;
   }
-  
+
   _products = inputProducts;
-  
+
   assert(venueItems.count == _products.count);
-  
+
   for (NSDictionary *inputProduct in _products) {
     FMProduct *product = [[FMProduct alloc] init];
     NSDictionary *venueItem = [venueItems objectAtIndex:[_products indexOfObject:inputProduct]];
-    
+
     product.name = [inputProduct objectForKey:@"name"];
     product.idn = [TiUtils intValue:[inputProduct objectForKey:@"id"]];
     product.checked = [TiUtils boolValue:[inputProduct objectForKey:@"isPickedUp"] def:NO];
-    
+
     NSArray *sections = (NSArray *)[venueItem objectForKey:@"sections"];
     NSMutableArray<FMSection *> *productSectionArray = [NSMutableArray arrayWithCapacity:[sections count]];
 
     for (NSDictionary *section in sections) {
       FMSection *newSection = [[FMSection alloc] init];
       newSection.maplocation = [(NSNumber *)[section valueForKey:@"mapPointId"] integerValue];
-      
+
       if (newSection.maplocation == 0) {
         continue;
       }
-      
+
       newSection.aisleTitle = [section valueForKey:@"aisle"];
       newSection.title = [section valueForKey:@"section"];
-      
+
       [productSectionArray addObject:newSection];
     }
-    
+
     product.sections = productSectionArray;
     [sdkProducts addObject:product];
   }
-  
+
   [[self overlay] setProducts:sdkProducts];
-  
+
   TiThreadPerformOnMainThread(^{
     [[[self mapView] mapController] redrawOverlay:[self overlay]];
-  }, NO);
+  },
+      NO);
 }
 
 - (void)reloadTiles:(id)unused
@@ -148,10 +149,10 @@
 - (void)fadeIn:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
-  
+
   NSNumber *zoom = [args objectForKey:@"zoom"];
   NSNumber *relativeToScreen = [args objectForKey:@"relativeToScreen"];
-  
+
   [[[self mapView] mapController] fadeInWithZoom:zoom.floatValue
                                 relativeToScreen:relativeToScreen.boolValue];
 }
@@ -159,7 +160,7 @@
 - (void)search:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
-  
+
   if ([[self mapView] shoppingModeEnabled]) {
     [self _searchInShoppingList:args];
   } else {
@@ -171,94 +172,95 @@
 
 - (void)_searchInShoppingList:(NSDictionary *)args
 {
-  
+
   NSNumber *venueId = [args objectForKey:@"venueId"];
   NSString *name = [args objectForKey:@"name"];
   NSArray *products = [args objectForKey:@"products"]; // { name: '', id: '', section: '', ... }
   KrollCallback *callback = [args objectForKey:@"callback"];
-  
+
   AisleServer *server = [AisleServer shared];
-  
+
   NSMutableArray *items = [NSMutableArray arrayWithCapacity:products.count];
-  
+
   for (NSDictionary *item in products) {
-    [items addObject:@{@"name": [item valueForKey:@"sectionCode"] ?: @""}];
+    [items addObject:@{ @"name" : [item valueForKey:@"sectionCode"] ?: @"" }];
   }
-  
+
   [server searchWithVenueWithId:venueId.integerValue
-         forItemsFromDictionary:@{@"name": name, @"items": items}
-              withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
-                if (errors.count > 0 ) {
-                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
-                  return;
-                }
-                
-                NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
-                
-                for (IVKVenueItem *venueItem in venueItems) {
-                  [dictVenueItems addObject:[self dictionaryFromVenueItem:venueItem]];
-                }
-                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
-              }];
+      forItemsFromDictionary:@{ @"name" : name,
+        @"items" : items }
+      withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
+        if (errors.count > 0) {
+          [callback call:@[ @{ @"error" : [[errors objectAtIndex:0] description] } ] thisObject:self];
+          return;
+        }
+
+        NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
+
+        for (IVKVenueItem *venueItem in venueItems) {
+          [dictVenueItems addObject:[self dictionaryFromVenueItem:venueItem]];
+        }
+        [callback call:@[ @{ @"venueItems" : dictVenueItems } ] thisObject:self];
+      }];
 }
 
 - (void)_searchWithFulltext:(NSDictionary *)args
 {
-  
+
   NSNumber *venueId = [args objectForKey:@"venueId"];
   NSString *searchTerm = [args objectForKey:@"searchTerm"];
   NSNumber *startingIndex = [args objectForKey:@"startingIndex"];
   NSNumber *endingIndex = [args objectForKey:@"endingIndex"];
   NSNumber *maxCount = [args objectForKey:@"maxCount"];
   KrollCallback *callback = [args objectForKey:@"callback"];
-  
+
   AisleServer *server = [AisleServer shared];
-  
+
   [server searchWithVenueWithId:venueId.integerValue
                         forTerm:searchTerm
               withStartingIndex:startingIndex.integerValue
                  andEndingIndex:endingIndex.integerValue
                    withMaxCount:maxCount.integerValue
               withResponseBlock:^(NSArray<IVKVenueItem *> *venueItems, NSArray<IVKError *> *errors) {
-                if (errors.count > 0 ) {
-                  [callback call:@[@{@"error": [[errors objectAtIndex:0] description]}] thisObject:self];
+                if (errors.count > 0) {
+                  [callback call:@[ @{ @"error" : [[errors objectAtIndex:0] description] } ] thisObject:self];
                   return;
                 }
-                
+
                 NSMutableArray *dictVenueItems = [NSMutableArray arrayWithCapacity:venueItems.count];
-                
+
                 for (IVKVenueItem *venueItem in venueItems) {
                   [dictVenueItems addObject:[self dictionaryFromVenueItem:venueItem]];
                 }
-                [callback call:@[@{@"venueItems": dictVenueItems}] thisObject:self];
+                [callback call:@[ @{ @"venueItems" : dictVenueItems } ] thisObject:self];
               }];
 }
 
 - (NSDictionary *)dictionaryFromVenueItem:(IVKVenueItem *)venueItem
 {
   return @{
-    @"id": NUMINTEGER(venueItem.id),
-    @"name": venueItem.name,
-    @"price": NUMDOUBLE(venueItem.price),
-    @"discountedPrice": NUMDOUBLE(venueItem.discountedPrice),
-    @"section": venueItem.sectionName,
-    @"sections": [self arrayFromSections:venueItem.sections],
-    @"venueItemTypeName": venueItem.venueItemTypeName
+    @"id" : NUMINTEGER(venueItem.id),
+    @"name" : venueItem.name,
+    @"price" : NUMDOUBLE(venueItem.price),
+    @"discountedPrice" : NUMDOUBLE(venueItem.discountedPrice),
+    @"section" : venueItem.sectionName,
+    @"sections" : [self arrayFromSections:venueItem.sections],
+    @"venueItemTypeName" : venueItem.venueItemTypeName
   };
 }
 
 - (NSArray *)arrayFromSections:(NSArray<IVKSection *> *)sections
 {
   NSMutableArray *result = [NSMutableArray arrayWithCapacity:sections.count];
-  
+
   for (IVKSection *section in sections) {
     [result addObject:@{
-      @"aisle": section.aisle,
-      @"mapPointId": NUMINTEGER(section.mapPointId),
-      @"section": section.section
+      @"aisle" : section.aisle,
+      @"mapPointId" : NUMINTEGER(section.mapPointId),
+      @"section" : section.section
     }];
   }
-  
+
   return result;
 }
 

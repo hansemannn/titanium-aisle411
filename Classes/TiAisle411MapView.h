@@ -8,7 +8,7 @@
 #import <MapSDK/MapSDK.h>
 
 @interface TiAisle411MapView : TiUIView <MapControllerDelegate, InformationBarDelegate, InformationBarDataSource, CalloutOverlayDelegate> {
-@private
+  @private
   TiDimension _width;
   TiDimension _height;
   CGFloat _autoHeight;

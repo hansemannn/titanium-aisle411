@@ -8,7 +8,6 @@
 #import "TiModule.h"
 
 @interface TiAisle411Module : TiModule {
-
 }
 
 - (void)requestCachedRasterMap:(id)args;
