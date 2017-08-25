@@ -49,16 +49,16 @@ Create a new map-view with `Aisle411.createMapView()`.
 - [x] `url` (use the `e.path` from the `requestCachedRasterMap` callback)
 - [x] `floor`
 - [x] `logoPosition`
+- [x] `shoppingListEnabled`
 - [x] `compassEnabled`
 - [x] `zoomButtonsHidden`
-- [x] `zoomEnabled`
+- [x] `zoomOnPinClickEnabled`
 
 #### Methods
 
 - [x] `clear()`
 - [x] `zoomIn()`
 - [x] `zoomOut()`
-- [x] `addOverlay()`
 - [x] `redraw()`
 - [x] `redrawOverlay()`
 - [x] `fadeIn(args)`
@@ -72,7 +72,6 @@ Create a new map-view with `Aisle411.createMapView()`.
 - [x] `didItemSelected`
 - [x] `didItemReselected`
 - [x] `didItemDeselected`
-- [x] `shouldZ`
 
 ## Author
 Hans Knöchel

@@ -17,13 +17,11 @@
 
 #pragma mark Internal
 
-// This is generated for your module, please do not change it
 - (id)moduleGUID
 {
   return @"2bd872ef-d80a-4d07-be50-cbd424b67eb4";
 }
 
-// This is generated for your module, please do not change it
 - (NSString *)moduleId
 {
   return @"ti.aisle411";
@@ -33,8 +31,6 @@
 
 - (void)startup
 {
-  // This method is called when the module is first loaded
-  // You *must* call the superclass
   [super startup];
   NSLog(@"[DEBUG] %@ loaded", self);
 }
@@ -56,8 +52,7 @@
                              return;
                            }
 
-                           [callback call:@[ @{ @"url" : NULL_IF_NIL(url.absoluteString),
-                             @"path" : NULL_IF_NIL(url.path) } ]
+                           [callback call:@[ @{ @"path" : NULL_IF_NIL(url.path) } ]
                                thisObject:self];
                          }];
 }

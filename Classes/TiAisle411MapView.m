@@ -232,6 +232,11 @@
   return sectionForOverlay.aisleTitle;
 }
 
+- (BOOL)calloutOverlay:(CalloutOverlay *)overlay shouldZoom:(OverlayItem *)item
+{
+  return [TiUtils boolValue:[[self proxy] valueForKey:@"zoomOnPinClickEnabled"] def:NO];
+}
+
 #pragma mark Callout Overlay Delegate
 
 - (void)calloutOverlay:(CalloutOverlay *)overlay didItemSelected:(OverlayItem *)item
