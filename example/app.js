@@ -1,39 +1,136 @@
-// This is a test harness for your module
-// You should do something interesting in this harness
-// to test out the module and to provide instructions
-// to users on how to use it by example.
+var aisle411,
+		mapView,
+		mapLoaded,
+		products,
+		window,
+		loader;
 
-
-// open a single window
-var win = Ti.UI.createWindow({
-	backgroundColor:'white'
-});
-var label = Ti.UI.createLabel();
-win.add(label);
-win.open();
-
-// TODO: write your module tests here
-var titanium_aisle411 = require('ti.aisle411');
-Ti.API.info("module is => " + titanium_aisle411);
-
-label.text = titanium_aisle411.example();
-
-Ti.API.info("module exampleProp is => " + titanium_aisle411.exampleProp);
-titanium_aisle411.exampleProp = "This is a test value";
-
-if (Ti.Platform.name == "android") {
-	var proxy = titanium_aisle411.createExample({
-		message: "Creating an example Proxy",
-		backgroundColor: "red",
-		width: 100,
-		height: 100,
-		top: 100,
-		left: 150
+/**
+ @abstract Constructor
+ */
+(function constructor() {
+	// A list of products. Only use those that are not picked up and match the "productsToBuy" property
+	products = [{
+		id: 1,
+		name: 'Shampoo',
+		sectionCode: '7'
+	},{
+		id: 2,
+		name: 'Hand Cream',
+		sectionCode: '7'
+	},//{
+	// 	id: 3,
+	// 	name: 'Isotonic drink',
+	// 	sectionCode: '44',
+	// 	isPickedUp: true
+	// },
+	{
+		id: 4,
+		name: 'Bread',
+		sectionCode: '4'
+	},//{
+	// 	id: 5,
+	// 	name: 'Milk',
+	// 	sectionCode: '4'
+	// },{
+	// 	id: 6,
+	// 	name: 'Sour Cream',
+	// 	sectionCode: '4'
+	// },
+	{
+		id: 7,
+		name: 'Toothpaste',
+		sectionCode: '8'
+	},{
+		id: 8,
+		name: 'Cheese',
+		sectionCode: '36'
+	}];
+	
+	aisle411 = require('ti.aisle411');
+	
+	mapLoaded = false;
+	
+	window = Ti.UI.createWindow();
+	
+	loader = Ti.UI.createActivityIndicator({
+		style: Ti.UI.ActivityIndicatorStyle.BIG,
+		indicatorColor: 'gray'
 	});
+	
+	aisle411.requestCachedRasterMap({
+		venueId: 1100951,
+		callback: function(e) {	
+			mapView = aisle411.createMapView({ 
+				url: e.path,
+				shoppingListEnabled: true,
+				unselectedPinImage: 'unselected.png',
+				selectedPinImage: 'selected.png'
+			});
+			mapView.addEventListener('load', mapFinishedLoading);
+			window.add(mapView);	
+		}
+	});
+	
+})();
 
-	proxy.printMessage("Hello world!");
-	proxy.message = "Hi world!.  It's me again.";
-	proxy.printMessage("Hello world!");
-	win.add(proxy);
+window.add(loader);
+window.open();
+loader.show();
+
+function onSearchReturn(e) {
+	if (!mapLoaded) {
+		alert('Map not loaded, yet!');
+		return;
+	}
+	searchProductWitSearchTerm(e.value);
 }
 
+function searchProductWitSearchTerm(searchTerm) {	
+	// Simulate fetching the product in our data-structure
+	for (var i = 0; i < products.length; i++) {
+		var product = products[i];
+		if (product.name === searchTerm) {
+			result = product.sectionCode;
+			searchProducts([product])
+			break;
+		}
+	}
+}
+
+function searchProducts(_products) {
+	loader.show();
+	
+	mapView.search({
+		venueId: 1100951,
+		name: 'shoppingList',
+		products: _products,
+		callback: function(e) {
+			Ti.API.info('Search completed!');
+
+			loader.hide();
+       
+      if (e.error) {
+        Ti.API.error('Error:' + e.error);
+        return;
+      }
+
+      showPins(_products, e.venueItems);
+		}
+  });
+}
+
+function showPins(products, venueItems) {
+	if (!mapLoaded) {
+		Ti.API.error('Error: Trying to redraw on map that is not loaded');
+	}
+	mapView.redrawOverlay({
+		products: products,
+		venueItems: venueItems
+	});
+}
+
+function mapFinishedLoading(e) {
+	mapLoaded = true;
+	searchProducts(products);
+}

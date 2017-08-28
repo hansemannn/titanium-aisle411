@@ -13,9 +13,15 @@
 
 - (void)setFloor:(id)floor;
 
+- (void)setZoomButtonsHidden:(id)floor;
+
 - (void)setLogoPosition:(id)logoPosition;
 
 - (void)setCompassEnabled:(id)compassEnabled;
+
+- (void)setBackgroundColor:(id)backgroundColor;
+
+- (void)setKeyWordLabelText:(id)keyWordLabelText;
 
 - (void)deselectAll:(id)unused;
 
@@ -32,5 +38,7 @@
 - (void)reloadTiles:(id)unused;
 
 - (void)fadeIn:(id)args;
+
+- (void)search:(id)args;
 
 @end
