@@ -1,0 +1,29 @@
+-x
+objective-c
+-arch
+arm64
+-std=c99
+-fobjc-arc
+-fpascal-strings
+-Os
+-fno-common
+-DTI_VERSION=
+-DOBJC_OLD_DISPATCH_PROTOTYPES=0
+-isysroot
+/Applications/Xcode9.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.0.sdk
+-miphoneos-version-min=8.0
+-g
+-iquote
+-iquote
+-I/Users/hknoechel/Documents/appcelerator_modules/titanium-aisle411/build/Release-iphoneos/include
+-I/Users/hknoechel/Library/Application Support/Titanium/mobilesdk/osx/6.1.2.GA/iphone/include
+-I/Users/hknoechel/Library/Application Support/Titanium/mobilesdk/osx/6.1.2.GA/iphone/include/TiCore
+-I/Users/hknoechel/Library/Application Support/Titanium/mobilesdk/osx/6.1.2.GA/iphone/include/JavaScriptCore
+-F/Users/hknoechel/Documents/appcelerator_modules/titanium-aisle411/build/Release-iphoneos
+-F/Users/hknoechel/Documents/appcelerator_modules/titanium-aisle411/platform/ios
+-F/Users/hknoechel/Documents/appcelerator_modules/titanium-aisle411/platform
+-DTI_POST_1_2
+aarch64-apple-darwin16.7.0
+"4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.34.1)"
+SDK_PRODUCT_BUILD_VERSION=15A5341e
+15A5341e

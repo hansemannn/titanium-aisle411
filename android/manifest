@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 3
+architectures: armeabi-v7a x86
+description: titanium-aisle411
+author: Joshua Quick, Axway Appcelerator
+license: Private
+copyright: Copyright (c) 2017-present by Axway Appcelerator
+
+# these should not be edited
+name: titanium-aisle411
+moduleid: ti.aisle411
+guid: ed9f1e4f-6363-4c03-b872-d6fa7d3ba710
+platform: android
+minsdk: 6.0.0
