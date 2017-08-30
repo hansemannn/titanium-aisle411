@@ -14,6 +14,11 @@
 
 @implementation TiAisle411MapViewProxy
 
+- (NSArray *)keySequence
+{
+  return @[@"url", @"shoppingListEnabled", @"selectedPinImage", @"unselectedPinImage"];
+}
+
 - (TiAisle411MapView *)mapView
 {
   return (TiAisle411MapView *)[self view];
@@ -50,7 +55,7 @@
   [[[self mapView] mapController] setCompassEnabled:[TiUtils boolValue:compassEnabled]];
 }
 
-- (void)setBackgroundColor:(id)backgroundColor
+- (void)setMapBackgroundColor:(id)backgroundColor
 {
   ENSURE_TYPE(backgroundColor, NSString);
   [[[self mapView] mapController] setMapBackgroundColor:[TiUtils colorValue:backgroundColor].color];

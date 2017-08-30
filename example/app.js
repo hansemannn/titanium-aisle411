@@ -51,7 +51,7 @@ var aisle411,
 	
 	mapLoaded = false;
 	
-	window = Ti.UI.createWindow();
+	window = Ti.UI.createWindow({ backgroundColor: '#fff' });
 	
 	loader = Ti.UI.createActivityIndicator({
 		style: Ti.UI.ActivityIndicatorStyle.BIG,
@@ -65,7 +65,8 @@ var aisle411,
 				url: e.path,
 				shoppingListEnabled: true,
 				unselectedPinImage: 'unselected.png',
-				selectedPinImage: 'selected.png'
+				selectedPinImage: 'selected.png',
+				mapBackgroundColor: '#eee'
 			});
 			mapView.addEventListener('load', mapFinishedLoading);
 			window.add(mapView);	

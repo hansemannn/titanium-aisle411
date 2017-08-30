@@ -19,7 +19,7 @@
 
 - (void)setCompassEnabled:(id)compassEnabled;
 
-- (void)setBackgroundColor:(id)backgroundColor;
+- (void)setMapBackgroundColor:(id)backgroundColor;
 
 - (void)setKeyWordLabelText:(id)keyWordLabelText;
 

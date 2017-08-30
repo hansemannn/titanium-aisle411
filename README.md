@@ -53,6 +53,9 @@ Create a new map-view with `Aisle411.createMapView()`.
 - [x] `compassEnabled`
 - [x] `zoomButtonsHidden`
 - [x] `zoomOnPinClickEnabled`
+- [x] `mapBackgroundColor`
+- [x] `selectedPinImage`
+- [x] `unselectedPinImage`
 
 #### Methods
 
