@@ -1,8 +1,8 @@
 # Aisle411 in Axway Titanium
 
-Use the Aisle411 iOS-SDK in Axway Titanium.
+Use the Aisle411 SDK in Axway Titanium.
 
-## Requirements
+## Requirements (iOS)
 - File `com.aisle411.venuekit.plist` bundled with your application:
 ```plist
 <?xml version="1.0" encoding="UTF-8"?>
@@ -80,5 +80,5 @@ Create a new map-view with `Aisle411.createMapView()`.
 Hans Knöchel
 
 ## License
-Copyright(c) 2017-Present by Ayway Appcelerator. All Rights Reserved. 
+Copyright(c) 2017-present by Ayway Appcelerator. All Rights Reserved. 
 Please see the LICENSE file included in the distribution for further details.
