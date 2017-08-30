@@ -9,12 +9,12 @@ Use the Aisle411 SDK in Axway Titanium.
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>partnerID</key>
-	<string>PARTNER_ID</string>
-	<key>partnerSecret</key>
-	<string>PARTNER_SECRET</string>
-	<key>host</key>
-	<string>test.aisle411.ws</string>
+  <key>partnerID</key>
+  <string>PARTNER_ID</string>
+  <key>partnerSecret</key>
+  <string>PARTNER_SECRET</string>
+  <key>host</key>
+  <string>test.aisle411.ws</string>
 </dict>
 </plist>
 ```
