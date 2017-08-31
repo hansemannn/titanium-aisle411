@@ -110,7 +110,7 @@
   cell.textLabel.attributedText = [TiAisle411MapView cellTitleForProduct:selectedProduct andDictionary:publixProduct];
 
   if ([[self proxy] _hasListeners:@"informationBarItemClick"]) {
-    [[self proxy] fireEvent:@"informationBarItemClick" withObject:@{ @"title" : item.title }]; // Return more if desired
+    [[self proxy] fireEvent:@"informationBarItemClick" withObject:@{ @"product": publixProduct }];
   }
 }
 
