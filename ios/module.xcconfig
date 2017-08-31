@@ -1,0 +1,5 @@
+// Add the framework search paths
+FRAMEWORK_SEARCH_PATHS = $(SRCROOT)/../../modules/iphone/ti.aisle411/$(TI_MODULE_VERSION)/platform ~/Library/Application\ Support/Titanium/modules/iphone/ti.aisle411/$(TI_MODULE_VERSION)/platform
+
+// Required frameworks and libraries
+OTHER_LDFLAGS=$(inherited) -framework CoreLocation -framework QuartzCore -framework CoreGraphics -lz -framework AisleNetworking -framework MapSDK
