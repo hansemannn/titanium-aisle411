@@ -96,13 +96,21 @@
   ProductOverlayItem *spItem = (ProductOverlayItem *)item;
   FMProduct *selectedProduct = spItem.products[rowIndex];
 
-  NSDictionary *publixProduct = [[[self mapViewProxy] products] objectAtIndex:rowIndex];
-  BOOL isPickedUp = [TiUtils boolValue:[publixProduct valueForKey:@"isPickedUp"] def:NO];
+  NSDictionary *publixProduct = nil;
+  
+  for (NSDictionary *product in [[self mapViewProxy] products]) {
+    if ([TiUtils intValue:[product valueForKey:@"id"]] == selectedProduct.idn) {
+      publixProduct = product;
+      break;
+    }
+  }
 
   if (publixProduct == nil) {
     return;
   }
 
+  BOOL isPickedUp = [TiUtils boolValue:[publixProduct valueForKey:@"isPickedUp"] def:NO];
+  
   [publixProduct setValue:@(!isPickedUp) forKey:@"isPickedUp"];
   selectedProduct.checked = !isPickedUp;
 
