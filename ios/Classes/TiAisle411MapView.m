@@ -84,6 +84,11 @@
 
 - (void)mapControllerDidFinishLoading:(MapController *)aMapController
 {
+  // Fix incorrectly scaled maps
+  if (aMapController.mapRotation != 0) {
+    [aMapController resetMapRotation];
+  }
+  
   if ([[self proxy] _hasListeners:@"load"]) {
     [[self proxy] fireEvent:@"load"];
   }
