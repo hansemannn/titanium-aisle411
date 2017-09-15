@@ -1,4 +1,4 @@
-/ios/build
-/android/build
-/ios/titanium-aisle411.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad
-/ios/titanium-aisle411.xcodeproj/xcuserdata/*
+ios/build
+android/build
+ios/titanium-aisle411.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad
+ios/titanium-aisle411.xcodeproj/xcuserdata/*
