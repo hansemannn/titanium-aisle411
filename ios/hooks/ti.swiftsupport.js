@@ -1,12 +1,12 @@
 /**
- * Ti.SwiftSupport
- * Copyright (c) 2017-present by Axway Appcelerator
+ * Ti.iCloud
+ * Copyright (c) 2017-Present by Axway Appcelerator
  * All Rights Reserved.
  */
 
 'use strict';
 
-exports.id = 'ti.swiftsupport';
+exports.id = 'ti.icloud';
 exports.cliVersion = '>=3.2';
 exports.init = init;
 
@@ -20,8 +20,8 @@ function init(logger, config, cli, appc) {
 			logger.info('Enabling Swift support ...');
 
 			var xobjs = data.args[0].hash.project.objects;
-			var SWIFT_VERSION = 3.1; // Change to desired Swift version
-															
+			var SWIFT_VERSION = 3.1
+												
 			Object.keys(xobjs.PBXNativeTarget).forEach(function (targetUuid) {
 				var target = xobjs.PBXNativeTarget[targetUuid];
 				if (target && typeof target === 'object') {
@@ -31,7 +31,17 @@ function init(logger, config, cli, appc) {
 
 						if (!buildSettings.SWIFT_VERSION) {
 							buildSettings.SWIFT_VERSION = SWIFT_VERSION;
-						}					
+						}
+
+						// LD_RUNPATH_SEARCH_PATHS is a space separated string of paths
+						var searchPaths = (buildSettings.LD_RUNPATH_SEARCH_PATHS || '').replace(/^"/, '').replace(/"$/, '');
+						if (searchPaths.indexOf('$(inherited)') === -1) {
+							searchPaths += ' $(inherited)';
+						}
+						if (searchPaths.indexOf('@executable_path/Frameworks') === -1) {
+							searchPaths += ' @executable_path/Frameworks';
+						}
+						buildSettings.LD_RUNPATH_SEARCH_PATHS = '"' + searchPaths.trim() + '"';						
 					});
 				}
 			});
