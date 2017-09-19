@@ -147,6 +147,15 @@
     [[[self mapView] mapController] redrawOverlay:[self overlay]];
   },
       NO);
+  
+  // Justin Boswell
+  //  - Due to the crash issue being a result of a dead information bar begin shown,
+  //      we can remove it from the superview and have it regenerated when the pin is clicked.
+  TiThreadPerformOnMainThread(^{
+    [[[self overlay] informationBar] removeFromSuperview];
+  },
+      NO);
+  
 }
 
 - (void)reloadTiles:(id)unused
