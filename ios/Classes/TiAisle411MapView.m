@@ -84,6 +84,11 @@
 
 - (void)mapControllerDidFinishLoading:(MapController *)aMapController
 {
+  // Fix incorrectly scaled maps
+  if (aMapController.mapRotation != 0) {
+    [aMapController resetMapRotation];
+  }
+  
   if ([[self proxy] _hasListeners:@"load"]) {
     [[self proxy] fireEvent:@"load"];
   }
@@ -289,8 +294,8 @@
   // Strike through or not
   if ([TiUtils boolValue:[proxyProduct valueForKey:@"isPickedUp"] def:NO]) {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:product.name];
-    [attributedString addAttribute:NSStrikethroughStyleAttributeName value:@(2) range:NSMakeRange(0, attributedString.length)];
-
+    [attributedString addAttribute:NSBaselineOffsetAttributeName value:@0 range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttribute:NSStrikethroughStyleAttributeName value:@2 range:NSMakeRange(0, attributedString.length)];
     return attributedString;
   } else {
     return [[NSMutableAttributedString alloc] initWithString:product.name];

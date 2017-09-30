@@ -21,7 +21,7 @@ function init(logger, config, cli, appc) {
 
 			var xobjs = data.args[0].hash.project.objects;
 			var SWIFT_VERSION = 3.1
-												
+
 			Object.keys(xobjs.PBXNativeTarget).forEach(function (targetUuid) {
 				var target = xobjs.PBXNativeTarget[targetUuid];
 				if (target && typeof target === 'object') {
@@ -34,14 +34,21 @@ function init(logger, config, cli, appc) {
 						}
 
 						// LD_RUNPATH_SEARCH_PATHS is a space separated string of paths
-						var searchPaths = (buildSettings.LD_RUNPATH_SEARCH_PATHS || '').replace(/^"/, '').replace(/"$/, '');
+						var searchPaths = '';
+						if(buildSettings.LD_RUNPATH_SEARCH_PATHS && buildSettings.LD_RUNPATH_SEARCH_PATHS.length){
+							for(var ii=0; ii < buildSettings.LD_RUNPATH_SEARCH_PATHS.length; ii++) {
+								searchPaths += ' ' + buildSettings.LD_RUNPATH_SEARCH_PATHS[ii].replace(/"/g, '').replace(/\\/g, '');
+							}
+						}
+
 						if (searchPaths.indexOf('$(inherited)') === -1) {
 							searchPaths += ' $(inherited)';
 						}
 						if (searchPaths.indexOf('@executable_path/Frameworks') === -1) {
 							searchPaths += ' @executable_path/Frameworks';
 						}
-						buildSettings.LD_RUNPATH_SEARCH_PATHS = '"' + searchPaths.trim() + '"';						
+
+						buildSettings.LD_RUNPATH_SEARCH_PATHS = '"' + searchPaths.trim() + '"';
 					});
 				}
 			});

@@ -108,42 +108,37 @@
   NSArray *inputProducts = [args objectForKey:@"products"];
   NSMutableArray<FMProduct *> *sdkProducts = [NSMutableArray array];
 
-  if (!inputProducts) {
-    NSLog(@"[ERROR] Missing required parameter 'products!'");
-    return;
-  }
-
   _products = inputProducts;
 
-  assert(venueItems.count == _products.count);
+  if (inputProducts && venueItems && venueItems.count == inputProducts.count) {
+    for (NSDictionary *inputProduct in _products) {
+      FMProduct *product = [[FMProduct alloc] init];
+      NSDictionary *venueItem = [venueItems objectAtIndex:[_products indexOfObject:inputProduct]];
 
-  for (NSDictionary *inputProduct in _products) {
-    FMProduct *product = [[FMProduct alloc] init];
-    NSDictionary *venueItem = [venueItems objectAtIndex:[_products indexOfObject:inputProduct]];
+      product.name = [inputProduct objectForKey:@"name"];
+      product.idn = [TiUtils intValue:[inputProduct objectForKey:@"id"]];
+      product.checked = [TiUtils boolValue:[inputProduct objectForKey:@"isPickedUp"] def:NO];
 
-    product.name = [inputProduct objectForKey:@"name"];
-    product.idn = [TiUtils intValue:[inputProduct objectForKey:@"id"]];
-    product.checked = [TiUtils boolValue:[inputProduct objectForKey:@"isPickedUp"] def:NO];
+      NSArray *sections = (NSArray *)[venueItem objectForKey:@"sections"];
+      NSMutableArray<FMSection *> *productSectionArray = [NSMutableArray arrayWithCapacity:[sections count]];
 
-    NSArray *sections = (NSArray *)[venueItem objectForKey:@"sections"];
-    NSMutableArray<FMSection *> *productSectionArray = [NSMutableArray arrayWithCapacity:[sections count]];
+      for (NSDictionary *section in sections) {
+        FMSection *newSection = [[FMSection alloc] init];
+        newSection.maplocation = [(NSNumber *)[section valueForKey:@"mapPointId"] integerValue];
 
-    for (NSDictionary *section in sections) {
-      FMSection *newSection = [[FMSection alloc] init];
-      newSection.maplocation = [(NSNumber *)[section valueForKey:@"mapPointId"] integerValue];
+        if (newSection.maplocation == 0) {
+          continue;
+        }
 
-      if (newSection.maplocation == 0) {
-        continue;
+        newSection.aisleTitle = [section valueForKey:@"aisle"];
+        newSection.title = [section valueForKey:@"section"];
+
+        [productSectionArray addObject:newSection];
       }
 
-      newSection.aisleTitle = [section valueForKey:@"aisle"];
-      newSection.title = [section valueForKey:@"section"];
-
-      [productSectionArray addObject:newSection];
+      product.sections = productSectionArray;
+      [sdkProducts addObject:product];
     }
-
-    product.sections = productSectionArray;
-    [sdkProducts addObject:product];
   }
 
   [[self overlay] setProducts:sdkProducts];
@@ -152,6 +147,15 @@
     [[[self mapView] mapController] redrawOverlay:[self overlay]];
   },
       NO);
+  
+  // Justin Boswell
+  //  - Due to the crash issue being a result of a dead information bar begin shown,
+  //      we can remove it from the superview and have it regenerated when the pin is clicked.
+  TiThreadPerformOnMainThread(^{
+    [[[self overlay] informationBar] removeFromSuperview];
+  },
+      NO);
+  
 }
 
 - (void)reloadTiles:(id)unused
