@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  In order to display a slide-out "InformationBar" product/shopping list, we need to set
+  the "gravity" attribute to "bottom". This cannot be set programmatically in Java and
+  the "InformationBarLayout" defaults to "top" which fails to display the list due to a bug.
+  -->
+<com.aisle411.mapsdk.map.InformationBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom" />

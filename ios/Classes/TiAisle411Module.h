@@ -10,6 +10,7 @@
 @interface TiAisle411Module : TiModule {
 }
 
+- (void)setup:(id)args;
 - (void)requestCachedRasterMap:(id)args;
 
 @end

@@ -37,6 +37,11 @@
 
 #pragma mark Public APIs
 
+- (void)setup:(id)args
+{
+  NSLog(@"[WARN] Aisle411 setup() method is not supported on iOS. You must use a plist file instead.");
+}
+
 - (void)requestCachedRasterMap:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);

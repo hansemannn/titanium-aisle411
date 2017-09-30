@@ -33,13 +33,10 @@ Use the Aisle411 SDK in Axway Titanium.
 - [x] `requestCachedRasterMap(args)`
   - `venueId` (Number)
   - `callback` (Callback)
-- [x] `search(args)`
-  - `venueId` (Number)
-  - `term` (String)
-  - `startingIndex` (Number)
-  - `endingIndex` (Number)
-  - `maxCount` (Number)
-  - `callback` (Callback)
+- [x] `setup(args)`: This method is only applicable on Android. It must be called before any other Aisle411 module method.
+  - `partnerId` (String)
+  - `partnerSecret` (String)
+  - `host` (String): Set to either `"production"`, `"qa"`, `"test"`, `"aisle411.ws"`, `"webservices3"`, or `"https"`.
 
 ### `MapView`
 Create a new map-view with `Aisle411.createMapView()`.
@@ -63,18 +60,32 @@ Create a new map-view with `Aisle411.createMapView()`.
 - [x] `zoomIn()`
 - [x] `zoomOut()`
 - [x] `redraw()`
-- [x] `redrawOverlay()`
+- [x] `redrawOverlay(args)`: Displays map marker pins for a given array of products. Set to empty arrays to clear the map markers.
+  - `products` (Dictionary[]): Array of product configuration to be displayed. Each product dictionary must provide a `name` string field and `id` numeric field.
+  - `venueItems` (Dictionary[]): Array of venue items received by the callback invoked by the  `MapView.search()` method. This array of venue item entries must pair with the given `products` array entries.
 - [x] `fadeIn(args)`
   - `zoom` (Number)
   - `relativeToScreen` (Boolean)
 - [x] `reloadTiles()`
+- [x] `search(args)`
+  - `venueId` (Number)
+  - `term` (String)
+  - `startingIndex` (Number): Zero based index to the first page to load.
+  - `endingIndex` (Number): Zero based index to the last page to load.
+  - `maxCount` (Number): Max number of items per page.
+  - `callback` (Callback)
 
 #### Events
 - [x] `load`
+  - Fired when a map url has been successfully loaded in the MapView.
 - [x] `informationBarItemClick`
+  - Fired when an item has been tapped on in the overlay product list view.
 - [x] `didItemSelected`
+  - Fired when a map marker pin has been tapped on and.
 - [x] `didItemReselected`
+  - Fired when a map marker pin that is already in the selection state has been tapped on again.
 - [x] `didItemDeselected`
+  - Fired when a map marker pin has been deselected. Typically happens when another pin has been tapped on.
 
 ## Author
 Hans Knöchel

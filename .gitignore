@@ -1,4 +1,8 @@
-/ios/build
-/android/build
-/ios/titanium-aisle411.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad
-/ios/titanium-aisle411.xcodeproj/xcuserdata/*
+.DS_Store
+android/build
+android/dist
+android/java-sources.txt
+android/libs
+ios/build
+ios/titanium-aisle411.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad
+ios/titanium-aisle411.xcodeproj/xcuserdata/*
