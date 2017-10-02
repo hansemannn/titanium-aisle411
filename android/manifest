@@ -15,4 +15,4 @@ name: titanium-aisle411
 moduleid: ti.aisle411
 guid: ed9f1e4f-6363-4c03-b872-d6fa7d3ba710
 platform: android
-minsdk: 6.0.0
+minsdk: 6.1.0
