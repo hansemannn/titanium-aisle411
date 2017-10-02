@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.ViewGroup;
 import com.aisle411.mapsdk.map.InformationBar;
 import com.aisle411.mapsdk.map.InformationBarHeader;
 import com.aisle411.mapsdk.map.InformationBarLayout;
@@ -339,6 +340,31 @@ public class MapViewProxy extends TiViewProxy
 				this.infoBarLayout = new InformationBarLayout(activity);
 			}
 			this.infoBarLayout.setInformationBar(this.infoBar);
+
+			// Work-around a bug in the slide-out overlay's header bar where it's text labels
+			// won't auto-size when selecting product pins on the map, causing ellipsis to be shown.
+			InformationBarHeader infoBarHeader = this.infoBarLayout.getInformationBarHeader();
+			if (infoBarHeader != null) {
+				class ViewWidthFixer {
+					public void fixView(View view) {
+						if (view != null) {
+							ViewGroup.LayoutParams params = view.getLayoutParams();
+							if (params != null) {
+								if (params.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
+									params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+									view.setLayoutParams(params);
+								}
+							}
+						}
+					}
+				}
+				ViewWidthFixer viewWidthFixer = new ViewWidthFixer();
+				viewWidthFixer.fixView(infoBarHeader.getLocation());
+				viewWidthFixer.fixView(infoBarHeader.getSection());
+				viewWidthFixer.fixView(infoBarHeader.getKeyword());
+			}
+
+			// Wrap the root Aisle411 view.
 			setNativeView(this.infoBarLayout);
 		}
 
